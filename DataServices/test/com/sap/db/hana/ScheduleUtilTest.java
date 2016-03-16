@@ -14,7 +14,7 @@ import org.junit.Test;
 public class ScheduleUtilTest {
 
 	/**
-	 * Test method for {@link com.sap.eim.ds.ScheduleUtil#main(java.lang.String[])}.
+	 * Test method for {@link com.sap.eim.dataservices.ScheduleUtil#main(java.lang.String[])}.
 	 */
 	@Test
 	public void testMain() {
@@ -22,7 +22,7 @@ public class ScheduleUtilTest {
 	}
 
 	/**
-	 * Test method for {@link com.sap.eim.ds.ScheduleUtil#insertBatch(java.util.ArrayList)}.
+	 * Test method for {@link com.sap.eim.dataservices.ScheduleUtil#insertBatch(java.util.ArrayList)}.
 	 */
 	@Test
 	public void testInsertBatch() {
@@ -30,7 +30,7 @@ public class ScheduleUtilTest {
 	}
 
 	/**
-	 * Test method for {@link com.sap.eim.ds.ScheduleUtil#insert(java.lang.String)}.
+	 * Test method for {@link com.sap.eim.dataservices.ScheduleUtil#insert(java.lang.String)}.
 	 */
 	@Test
 	public void testInsert() {
@@ -38,7 +38,7 @@ public class ScheduleUtilTest {
 	}
 
 	/**
-	 * Test method for {@link com.sap.eim.ds.ScheduleUtil#excludeJobNames(java.util.ArrayList, java.lang.String[])}.
+	 * Test method for {@link com.sap.eim.dataservices.ScheduleUtil#excludeJobNames(java.util.ArrayList, java.lang.String[])}.
 	 */
 	@Test
 	public void testExcludeJobNames() {
@@ -46,7 +46,7 @@ public class ScheduleUtilTest {
 	}
 
 	/**
-	 * Test method for {@link com.sap.eim.ds.ScheduleUtil#getJobNames()}.
+	 * Test method for {@link com.sap.eim.dataservices.ScheduleUtil#getJobNames()}.
 	 */
 	@Test
 	public void testGetJobNames() {
@@ -54,7 +54,7 @@ public class ScheduleUtilTest {
 	}
 
 	/**
-	 * Test method for {@link com.sap.eim.ds.ScheduleUtil#addDate(java.lang.String, int)}.
+	 * Test method for {@link com.sap.eim.dataservices.ScheduleUtil#addDate(java.lang.String, int)}.
 	 */
 	@Test
 	public void testAddDate() {
@@ -62,7 +62,7 @@ public class ScheduleUtilTest {
 	}
 
 	/**
-	 * Test method for {@link com.sap.eim.ds.ScheduleUtil#getGUID(java.lang.String)}.
+	 * Test method for {@link com.sap.eim.dataservices.ScheduleUtil#getGUID(java.lang.String)}.
 	 */
 	@Test
 	public void testGetGUID() {
@@ -70,7 +70,7 @@ public class ScheduleUtilTest {
 	}
 
 	/**
-	 * Test method for {@link com.sap.eim.ds.ScheduleUtil#getSchedName(java.lang.String)}.
+	 * Test method for {@link com.sap.eim.dataservices.ScheduleUtil#getSchedName(java.lang.String)}.
 	 */
 	@Test
 	public void testGetSchedName() {
@@ -78,7 +78,7 @@ public class ScheduleUtilTest {
 	}
 
 	/**
-	 * Test method for {@link com.sap.eim.ds.ScheduleUtil#queryMax()}.
+	 * Test method for {@link com.sap.eim.dataservices.ScheduleUtil#queryMax()}.
 	 */
 	@Test
 	public void testQueryMax() {
