@@ -3,30 +3,29 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="test"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/i310003/Documents/Workspaces/jars/com.sap.db.jdbc.jar"/>
-	<classpathentry kind="lib" path="lib/missring jars/org.eclipse.core.databinding_1.4.1.v20140214-0004.jar"/>
-	<classpathentry kind="lib" path="lib/missring jars/org.eclipse.core.databinding.beans_1.2.200.v20140214-0004.jar"/>
-	<classpathentry kind="lib" path="lib/missring jars/org.eclipse.core.databinding.observable_1.4.1.v20140210-1835.jar"/>
-	<classpathentry kind="lib" path="lib/missring jars/org.eclipse.core.databinding.property_1.4.200.v20140214-0004.jar"/>
-	<classpathentry kind="lib" path="lib/missring jars/org.eclipse.jface.databinding_1.6.200.v20140528-1422.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="lib/swt/com.ibm.icu_52.1.0.v201404241930.jar"/>
-	<classpathentry kind="lib" path="lib/swt/org.eclipse.core.commands_3.6.100.v20140528-1422.jar"/>
-	<classpathentry kind="lib" path="lib/swt/org.eclipse.core.runtime_3.10.0.v20140318-2214.jar"/>
-	<classpathentry kind="lib" path="lib/swt/org.eclipse.equinox.common_3.6.200.v20130402-1505.jar"/>
-	<classpathentry kind="lib" path="lib/swt/org.eclipse.equinox.registry_3.5.400.v20140428-1507.jar"/>
-	<classpathentry kind="lib" path="lib/swt/org.eclipse.jface_3.10.0.v20140604-0740.jar"/>
-	<classpathentry kind="lib" path="lib/swt/org.eclipse.jface.text_3.9.0.v20140521-1657.jar"/>
-	<classpathentry kind="lib" path="lib/swt/org.eclipse.osgi_3.10.0.v20140606-1445.jar"/>
-	<classpathentry kind="lib" path="lib/swt/org.eclipse.swt.win32.win32.x86_64_3.103.0.v20140605-2012.jar"/>
-	<classpathentry kind="lib" path="lib/swt/org.eclipse.text_3.5.300.v20130515-1451.jar"/>
-	<classpathentry kind="lib" path="lib/swt/org.eclipse.ui.forms_3.6.100.v20140422-1825.jar"/>
-	<classpathentry kind="lib" path="lib/swt/org.eclipse.ui.workbench_3.106.0.v20140530-0732.jar"/>
-	<classpathentry kind="lib" path="lib/icons/icons.jar"/>
+	<classpathentry kind="lib" path="lib/swt/com.ibm.icu_54.1.1.v201501272100.jar"/>
+	<classpathentry kind="lib" path="lib/swt/org.eclipse.core.commands_3.7.0.v20150422-0725.jar"/>
+	<classpathentry kind="lib" path="lib/swt/org.eclipse.core.runtime_3.11.1.v20150903-1804.jar"/>
+	<classpathentry kind="lib" path="lib/swt/org.eclipse.equinox.common_3.7.0.v20150402-1709.jar"/>
+	<classpathentry kind="lib" path="lib/swt/org.eclipse.equinox.registry_3.6.0.v20150318-1503.jar"/>
+	<classpathentry kind="lib" path="lib/swt/org.eclipse.jface_3.11.0.v20150602-1400.jar"/>
+	<classpathentry kind="lib" path="lib/swt/org.eclipse.jface.text_3.10.0.v20150603-1752.jar"/>
+	<classpathentry kind="lib" path="lib/swt/org.eclipse.osgi_3.10.101.v20150820-1432.jar"/>
+	<classpathentry kind="lib" path="lib/swt/org.eclipse.swt.win32.win32.x86_64_3.104.1.v20150825-0743.jar"/>
+	<classpathentry kind="lib" path="lib/swt/org.eclipse.text_3.5.400.v20150505-1044.jar"/>
+	<classpathentry kind="lib" path="lib/swt/org.eclipse.ui.forms_3.6.200.v20150506-2029.jar"/>
+	<classpathentry kind="lib" path="lib/swt/org.eclipse.ui.workbench_3.107.0.v20150825-2206.jar"/>
 	<classpathentry kind="lib" path="lib/poi/commons-codec-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/poi/commons-logging-1.1.jar"/>
 	<classpathentry kind="lib" path="lib/poi/junit-4.11.jar"/>
 	<classpathentry kind="lib" path="lib/poi/log4j-1.2.13.jar"/>
 	<classpathentry kind="lib" path="lib/poi/poi-3.10.1-20140818.jar"/>
+	<classpathentry kind="lib" path="lib/missring jars/org.eclipse.core.databinding_1.4.1.v20140214-0004.jar"/>
+	<classpathentry kind="lib" path="lib/missring jars/org.eclipse.core.databinding.beans_1.2.200.v20140214-0004.jar"/>
+	<classpathentry kind="lib" path="lib/missring jars/org.eclipse.core.databinding.observable_1.4.1.v20140210-1835.jar"/>
+	<classpathentry kind="lib" path="lib/missring jars/org.eclipse.core.databinding.property_1.4.200.v20140214-0004.jar"/>
+	<classpathentry kind="lib" path="lib/missring jars/org.eclipse.jface.databinding_1.6.200.v20140528-1422.jar"/>
+	<classpathentry kind="lib" path="lib/icons/icons.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
