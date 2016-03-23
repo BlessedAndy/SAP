@@ -8,8 +8,8 @@ public class DBUtilTest {
 
 	@Test
 	public void testGetConnection() {
-//		System.out.println(DBUtil.getHANAConnection().toString());
-		System.out.println(HanaUtil.getConnection().toString());
+		System.out.println(DBUtil.getHANAConnection().toString());
+		System.out.println(DBUtil.getOracleConnection().toString());
 	}
 
 	@Test
