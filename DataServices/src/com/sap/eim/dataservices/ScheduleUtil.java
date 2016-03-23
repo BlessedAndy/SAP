@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import com.sap.db.hana.HanaUtil;
+import com.sap.db.HanaUtil;
 
 public class ScheduleUtil {
 	
@@ -141,8 +141,8 @@ public class ScheduleUtil {
 	
 	public static String addDate(String timestamp, int x) {
 		//MMM dd, yyyy hh:mm:ss.S a                    2016-03-10 12:01:00 AM
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss a",Locale.ENGLISH);// 24小时�?
-		// SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");//12小时�?
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss a",Locale.ENGLISH);// 24小时�?
+		// SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");//12小时�?
 		Date date = null;
 		try {
 			date = format.parse(timestamp);
@@ -154,14 +154,14 @@ public class ScheduleUtil {
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(date);
 		cal.add(Calendar.MILLISECOND, x);
-//		cal.add(Calendar.HOUR_OF_DAY, x);// 24小时�?
-		 //关键�?  
-//		 Date newDate = DateUtils.addMilliseconds(cal,100))�?  
-		 //就是对cd加上100毫秒,�?100秒就是加�?-100毫秒      
+//		cal.add(Calendar.HOUR_OF_DAY, x);// 24小时�?
+		 //关键�?  
+//		 Date newDate = DateUtils.addMilliseconds(cal,100))�?  
+		 //就是对cd加上100毫秒,�?100秒就是加�?-100毫秒      
 		  
 		 //将生成的时间输出为字符串  
 //		 String newDate_str = sDateFormat.format(newDate);
-		// cal.add(Calendar.HOUR, x);12小时�?
+		// cal.add(Calendar.HOUR, x);12小时�?
 		date = cal.getTime();
 //		System.out.println("front:" + date);
 		cal = null;

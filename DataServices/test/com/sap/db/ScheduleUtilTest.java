@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.sap.db.hana;
+package com.sap.db;
 
 import static org.junit.Assert.*;
 

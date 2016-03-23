@@ -1,4 +1,4 @@
-package com.sap.db.hana;
+package com.sap.db;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,10 +26,14 @@ public class DBUtil {
 	private static ResultSet rs = null;
 	
 	//连接数据库的参数
-	private static String driver = "" ;
-	private static String url = "";
-	private static String userName = "";
-	private static String passwd = "";
+	private static String OracleDriver = "" ;
+	private static String HANADriver = "" ;
+	private static String OracleURL = "";
+	private static String HANAURL = "";
+	private static String OracleUserName = "";
+	private static String HANAUserName = "";
+	private static String OraclePasswd = "";
+	private static String HANAPasswd = "";
 	
 	private static Properties prop = null;
 	private static FileInputStream fis = null;
@@ -39,13 +43,19 @@ public class DBUtil {
 		try {
 			//从dbinfo.properties 文件中读取配置信息
 			prop = new Properties(); //在使用之前一定要先实例化。
+//			/DataServices/src/com/sap/db/dbinfo.properties
 			fis = new FileInputStream("dbinfo.properties");
 			prop.load(fis);
-			driver = prop.getProperty("driver");
-			url = prop.getProperty("url");
-			userName = prop.getProperty("userName");
-			passwd = prop.getProperty("passwd");
-			Class.forName(driver);
+			OracleDriver = prop.getProperty("OracleDriver");
+			HANADriver = prop.getProperty("HANADriver");
+			OracleURL = prop.getProperty("OracleURL");
+			HANAURL = prop.getProperty("HANAURL");
+			OracleUserName = prop.getProperty("OracleUserName");
+			HANAUserName = prop.getProperty("HANAUserName");
+			OraclePasswd = prop.getProperty("OraclePasswd");
+			HANAPasswd = prop.getProperty("HANAPasswd");
+			Class.forName(HANADriver);
+			Class.forName(OracleDriver);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
@@ -58,10 +68,20 @@ public class DBUtil {
 		}
 	}
 	
-	//得到连接
-	public static Connection getConnection(){
+	//得到HANA连接
+	public static Connection getHANAConnection(){
 		try {
-			conn = DriverManager.getConnection(url,userName,passwd);
+			conn = DriverManager.getConnection(HANAURL,HANAUserName,HANAPasswd);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return conn;
+	}
+	
+	//得到连接
+	public static Connection getOracleConnection(){
+		try {
+			conn = DriverManager.getConnection(OracleURL,OracleUserName,OraclePasswd);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -73,12 +93,12 @@ public class DBUtil {
 	 * @param sql
 	 * @param parameters
 	 */
-	public static void executeupdate2(String sql[], String[][] parameters){
+	public static void executeHANAupdate2(String sql[], String[][] parameters){
 		
 		try {
 			
 			//1.获得连接
-			conn = getConnection();
+			conn = getHANAConnection();
 			//因为这时用户传入的可能是多个sql语句。
 			conn.setAutoCommit(false);
 			//...
@@ -109,10 +129,10 @@ public class DBUtil {
 	//先写一个 update / delete / insert
 	//sql 格式： update 表明  set 字段名 = ? where 字段 = ?
 	//prameters 应该是 {"abc",23}; 这种形式
-	public static void executeUpdate(String sql, String[] parameters ){
+	public static void executeHANAUpdate(String sql, String[] parameters ){
 		
 		//1.创建一个ps
-		conn = getConnection();
+		conn = getHANAConnection();
 		try {
 			ps = conn.prepareStatement(sql);
 			//给？赋值
