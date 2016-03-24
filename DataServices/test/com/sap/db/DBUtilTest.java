@@ -2,6 +2,8 @@ package com.sap.db;
 
 import static org.junit.Assert.*;
 
+import java.sql.ResultSet;
+
 import org.junit.Test;
 
 public class DBUtilTest {
@@ -10,6 +12,8 @@ public class DBUtilTest {
 	public void testGetConnection() {
 		System.out.println(DBUtil.getHANAConnection().toString());
 		System.out.println(DBUtil.getOracleConnection().toString());
+		ResultSet result = DBUtil.getQueryResultSet();
+		System.out.println(result.toString());
 	}
 
 	@Test

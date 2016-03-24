@@ -83,14 +83,14 @@ public class HanaUtil {
 	 * @return
 	 */
 	public static Connection getConnection(){
-		//HED AB_SAP_POC  10.10.141.177:33915
+//		Connection conn = DBUtil.getHANAConnection();
+//		HED AB_SAP_POC  10.10.141.177:33915
 		//DS_REPOSITORY	10.10.141.177  DS_REPOSITORY Init1234
 		//DS_REPOSITORY_2	10.5.128.2:32915 	DS_REPOSITORY Init1234
-		String url = "jdbc:sap://10.10.141.177:33915?reconnect=true";
 		Connection conn = null;
 		try {
 			Class.forName("com.sap.db.jdbc.Driver");
-			conn = DriverManager.getConnection(url,"AB_SAP_POC","Init1234"); 
+			conn = DriverManager.getConnection("jdbc:sap://10.5.128.2:32915?reconnect=true","DS_REPOSITORY","Init1234"); 
 		} catch (ClassNotFoundException e) {			
 			e.printStackTrace();
 		}catch (SQLException e) {	

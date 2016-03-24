@@ -14,7 +14,8 @@ import com.sap.db.HanaUtil;
 
 public class ScheduleUtil {
 	
-	static int counter;
+	static int counter = 1000;
+	static String startTime = "2016-03-24 03:01:00 AM";  //2016-03-24 03:01:00 AM
 	static ResultSet result;
 	static String SCHED_NAME = null;
 	static String JOB_GUID = null;
@@ -23,11 +24,26 @@ public class ScheduleUtil {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String[] ins = { "JB_Y35LH_SHEET_COMP_NOPK_8AM", "JB_Y35LH_SHEET_COMP_NOPK_4PM","JB_Y01WEB_PAY_RATE_NOPK_12AM","JB_Y35LH_SHEET_COMP_NOPK_12AM"};
+		counter = queryMax()+1;
+		startTime = "2016-03-24 03:01:00 AM";      //schedule开始的时间
+		ArrayList<String> JobNames = getJobNames("JB_Y11%DELTA");  //SQL 语句里like后面的通配符regex
+		for(String JobName : JobNames){
+			System.out.println(counter + ":" + JobName);
+			insert(JobName);
+		}
+		
+		/*String[] ins = { "JB_Y11ES_DOC_MAIN_DELTA", "JB_Y11LBPOL_DELTA","JB_Y11ES_ISSUEDOC_DELTA","JB_Y11LBPOL_DELTA"};
 		for (int i = 0; i < ins.length; i++) {
 			insert(ins[i]);
-		}
-
+		}*/
+		
+	}
+	
+	/**
+	 * 激活或关闭schedule
+	 */
+	void active(){
+		
 	}
 	
 	public static void insertBatch(ArrayList<String> JOB_NAMES){
@@ -71,14 +87,26 @@ public class ScheduleUtil {
 	public static void insert(String JOB_NAME){
 		
 		Connection conn = HanaUtil.getConnection();
+		
+		String DeltaInsertBOESql = "insert into AL_SCHED_INFO values("+counter+","
+				+ "'"+JOB_NAME+"',"
+						+ "'"+getGUID(JOB_NAME)+"'," 
+								+ "'"+addDate("2016-03-24 03:01:00 PM", 30000*interval)+"'"
+										+ ",'-Slocalhost -NsecEnterprise -Q\"Repo\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspOraPRD_to_HANAERPPre',"
+												+ "'',35901," //这里的35901是AT_ID， 选择BOE就是这样，选择系统schedule就是-1，这个值可能不能乱改
+												+ "1,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
+												+ "3500,'0','0',0,0,'localhost')";
 			
 			String DeltaInsertSql = "insert into AL_SCHED_INFO values("+counter+","
 					+ "'"+JOB_NAME+"',"
-							+ "'"+getGUID(JOB_NAME)+"',"
-									+ "'"+addDate("2016-03-10 12:01:00 AM", 30000*interval)+"'"
-											+ ",'-R\"Repo.txt\"  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspPRD',"
-													+ "'',-1,0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
+							+ "'"+getGUID(JOB_NAME)+"'," 
+									+ "'"+addDate("2016-03-24 06:01:00 AM", 30000*interval)+"'"
+//									+ "'"+addDate(startTime, 30000*interval)+"'"
+											+ ",'-R\"Repo.txt\"  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspOraPRD_to_HANAERPPre',"
+													+ "'',-1,1,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
 													+ "3500,'0','0',0,1,'JS')";
+			
+			counter++;
 			interval++;
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(DeltaInsertSql);
@@ -94,7 +122,7 @@ public class ScheduleUtil {
 		}
 	}
 	
-	public static ArrayList<String> excludeJobNames(ArrayList<String> JOB_NAMES, String[] EX_NAMES){
+/*	public static ArrayList<String> excludeJobNames(ArrayList<String> JOB_NAMES, String[] EX_NAMES){
 		for(String JOB_NAME : getJobNames()){
 			for(int i=0; i < EX_NAMES.length; i++){
 				if(JOB_NAME.equalsIgnoreCase(EX_NAMES[i])){
@@ -103,12 +131,12 @@ public class ScheduleUtil {
 			}
 		}
 		return JOB_NAMES;
-	}
+	}*/
 
 
-	private static ArrayList<String> excludeJobNames(ArrayList<String> jobNames) {
+	private static ArrayList<String> excludeJobNames(ArrayList<String> jobNames, String JobNameRegex) {
 		// TODO Auto-generated method stub
-		for(String JOB_NAME : getJobNames()){
+		for(String JOB_NAME : getJobNames(JobNameRegex)){
 			for(int i=0; i < jobNames.size(); i++){
 				if(JOB_NAME.equalsIgnoreCase(jobNames.get(i))){
 					JOB_NAMES.remove(jobNames.get(i));
@@ -118,12 +146,13 @@ public class ScheduleUtil {
 		return JOB_NAMES;
 	}
 	
-	public static ArrayList<String> getJobNames() {
+	public static ArrayList<String> getJobNames(String regex) {
 		JOB_NAMES = new ArrayList<String>();
 		PreparedStatement pstmt;
 		try {
+			// regex = JB_Y%_DELTA
 			pstmt = HanaUtil.getConnection()
-					.prepareStatement("SELECT NAME FROM AL_LANG where OBJECT_TYPE=0 and NAME LIKE 'JB_Y%_DELTA'");
+					.prepareStatement("SELECT NAME FROM AL_LANG where OBJECT_TYPE=0 and NAME LIKE '"+regex+"'");
 			result = pstmt.executeQuery();
 			for (int i = 0; result.next(); i++) {
 				if (result.getString(1) != null) {
@@ -141,11 +170,12 @@ public class ScheduleUtil {
 	
 	public static String addDate(String timestamp, int x) {
 		//MMM dd, yyyy hh:mm:ss.S a                    2016-03-10 12:01:00 AM
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-mm-dd hh:mm:ss a",Locale.ENGLISH);// 24小时�?
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a",Locale.ENGLISH);// 24小时�?
 		// SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");//12小时�?
 		Date date = null;
 		try {
 			date = format.parse(timestamp);
+			System.out.println("date : "+date.toString());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -163,8 +193,9 @@ public class ScheduleUtil {
 //		 String newDate_str = sDateFormat.format(newDate);
 		// cal.add(Calendar.HOUR, x);12小时�?
 		date = cal.getTime();
-//		System.out.println("front:" + date);
+		System.out.println("front:" + date);
 		cal = null;
+		System.out.println("format.format(date): "+format.format(date));
 		return format.format(date);
 	}
 
@@ -218,7 +249,7 @@ public class ScheduleUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		System.out.println(counter);
+		System.out.println("MAX Object key - counter : "+counter);
 		return counter;
 	}
 
