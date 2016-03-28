@@ -25,6 +25,7 @@ public class DBUtil {
 	private static PreparedStatement ps = null;
 	private static ResultSet rs = null;
 	
+	
 	//连接数据库的参数
 	private static String OracleDriver = "" ;
 	private static String HANADriver = "" ;
@@ -37,6 +38,12 @@ public class DBUtil {
 	
 	private static Properties prop = null;
 	private static FileInputStream fis = null;
+	
+	DBUtil(Connection conn,PreparedStatement ps,ResultSet rs){
+		DBUtil.conn = conn;
+		DBUtil.ps = ps;
+		DBUtil.rs = rs;
+	}
 	
 	//加载驱动，只需要一次
 	static {

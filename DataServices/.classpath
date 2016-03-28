@@ -29,5 +29,6 @@
 	<classpathentry kind="lib" path="lib/icons/icons.jar"/>
 	<classpathentry kind="lib" path="lib/db/ojdbc6.jar"/>
 	<classpathentry kind="lib" path="lib/db/com.sap.db.jdbc.jar"/>
+	<classpathentry kind="lib" path="lib/db/simplefan.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

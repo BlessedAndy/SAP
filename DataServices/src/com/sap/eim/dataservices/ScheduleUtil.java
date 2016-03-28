@@ -15,7 +15,7 @@ import com.sap.db.HanaUtil;
 public class ScheduleUtil {
 	
 	static int counter = 1000;
-	static String startTime = "2016-03-24 03:01:00 AM";  //2016-03-24 03:01:00 AM
+	static String startTime = "2016-03-25 12:59:00 AM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
 	static ResultSet result;
 	static String SCHED_NAME = null;
 	static String JOB_GUID = null;
@@ -25,17 +25,21 @@ public class ScheduleUtil {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		counter = queryMax()+1;
-		startTime = "2016-03-24 03:01:00 AM";      //schedule开始的时间
-		ArrayList<String> JobNames = getJobNames("JB_Y11%DELTA");  //SQL 语句里like后面的通配符regex
-		for(String JobName : JobNames){
-			System.out.println(counter + ":" + JobName);
-			insert(JobName);
-		}
+		ArrayList<String> JobNames = getJobNames("JB_Y02T%DELTA");  //SQL 语句里like后面的通配符regex
+//		insertBatch(JobNames);
 		
-		/*String[] ins = { "JB_Y11ES_DOC_MAIN_DELTA", "JB_Y11LBPOL_DELTA","JB_Y11ES_ISSUEDOC_DELTA","JB_Y11LBPOL_DELTA"};
+		/*String[] ins = { "JB_Y02T_ACCIDENT_RSN_DELTA", "JB_Y02T_AGENT_DELTA"};
 		for (int i = 0; i < ins.length; i++) {
 			insert(ins[i]);
 		}*/
+		
+		for(String JobName : JobNames){
+			System.out.println(counter + ":" + JobName);
+			insert(JobName);
+			counter++;
+		}
+		
+		
 		
 	}
 	
@@ -100,10 +104,10 @@ public class ScheduleUtil {
 			String DeltaInsertSql = "insert into AL_SCHED_INFO values("+counter+","
 					+ "'"+JOB_NAME+"',"
 							+ "'"+getGUID(JOB_NAME)+"'," 
-									+ "'"+addDate("2016-03-24 06:01:00 AM", 30000*interval)+"'"
-//									+ "'"+addDate(startTime, 30000*interval)+"'"
+//									+ "'"+addDate("2016-03-24 06:01:00 AM", 30000*interval)+"'"
+									+ "'"+addDate(startTime, 30000*interval)+"'"
 											+ ",'-R\"Repo.txt\"  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspOraPRD_to_HANAERPPre',"
-													+ "'',-1,1,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
+													+ "'',-1,0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
 													+ "3500,'0','0',0,1,'JS')";
 			
 			counter++;

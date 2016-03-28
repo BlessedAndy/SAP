@@ -18,7 +18,12 @@ import java.util.Locale;
  * @author Andy Zhang
  *
  */
-public class HanaUtil {
+public class HanaUtil extends DBUtil{
+
+	HanaUtil(Connection conn, PreparedStatement ps, ResultSet rs) {
+		super(conn, ps, rs);
+		// TODO Auto-generated constructor stub
+	}
 
 	static int counter;
 	static ResultSet result;
@@ -85,7 +90,7 @@ public class HanaUtil {
 	public static Connection getConnection(){
 //		Connection conn = DBUtil.getHANAConnection();
 //		HED AB_SAP_POC  10.10.141.177:33915
-		//DS_REPOSITORY	10.10.141.177  DS_REPOSITORY Init1234
+		//DS_REPOSITORY	    10.5.128.2:32915  DS_REPOSITORY Init1234
 		//DS_REPOSITORY_2	10.5.128.2:32915 	DS_REPOSITORY Init1234
 		Connection conn = null;
 		try {
