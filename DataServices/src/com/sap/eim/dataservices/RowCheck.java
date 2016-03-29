@@ -18,6 +18,8 @@ public class RowCheck {
 	
 	static String countSQLPre = "SELECT COUNT(*) FROM ";
 	
+	String oracleCount = "select COUNT(*) from Y52T_GC_CLAIM WHERE LAST_UPDATE IS NULL OR LAST_UPDATE <= '28-MAR-16 12.59.59.999999 PM'";
+	
 	
 	public static void main(String[] args) {
 		System.out.println("Y01PWEB_APP_BASE Row Count : "+hanaRowCount("Y01PWEB_APP_BASE"));

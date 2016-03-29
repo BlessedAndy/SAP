@@ -15,7 +15,10 @@ import com.sap.db.HanaUtil;
 public class ScheduleUtil {
 	
 	static int counter = 1000;
-	static String startTime = "2016-03-25 12:59:00 AM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
+	static String startTime = "2016-03-28 12:59:00 AM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
+	static String NOPKStartTime_12AM = "2016-03-28 12:10:00 AM";  
+	static String NOPKStartTime_4AM = "2016-03-28 04:10:00 AM";
+	static String NOPKStartTime_8PM = "2016-03-28 08:10:00 PM";
 	static ResultSet result;
 	static String SCHED_NAME = null;
 	static String JOB_GUID = null;
@@ -25,7 +28,7 @@ public class ScheduleUtil {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		counter = queryMax()+1;
-		ArrayList<String> JobNames = getJobNames("JB_Y02T%DELTA");  //SQL 语句里like后面的通配符regex
+		ArrayList<String> JobNames = getJobNames("JB_Y01%DELTA");  //SQL 语句里like后面的通配符regex
 //		insertBatch(JobNames);
 		
 		/*String[] ins = { "JB_Y02T_ACCIDENT_RSN_DELTA", "JB_Y02T_AGENT_DELTA"};
@@ -33,18 +36,22 @@ public class ScheduleUtil {
 			insert(ins[i]);
 		}*/
 		
+		int i=0;
 		for(String JobName : JobNames){
 			System.out.println(counter + ":" + JobName);
 			insert(JobName);
 			counter++;
+			i++;
 		}
 		
+		System.out.println(i +" job schedules created!");
 		
 		
 	}
 	
 	/**
 	 * 激活或关闭schedule
+	 * 必须在management console里激活！！！
 	 */
 	void active(){
 		
@@ -58,19 +65,44 @@ public class ScheduleUtil {
 		}
 	}
 	
-	public static void insertNOPK(String JOB_NAME, String NAME_EXTEND) {
+	/**
+	 * 
+	 * @param JOB_NAME
+	 * @param StartTime   Start time of the schedules 12,4 or 8 (12AM, 4AM, 8PM)
+	 */
+	public static void insertNOPK(String JOB_NAME, String StartTime) {
 		Connection conn = HanaUtil.getConnection();
-		//
-		String NoPKDeltaInsertSql = "insert into AL_SCHED_INFO values(" + counter + "," + "'" + JOB_NAME + "'," + "'"
-				+ getGUID(JOB_NAME) + "'," + "'" + addDate("2016-03-10 12:01:00 AM", 30000 * interval) + "'"
-				+ ",'-R\"Repo.txt\"  -G\"" + getGUID(JOB_NAME) + "\" -t5 -T14 -KspPRD',"
-				+ "'',-1,0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com'," + "3500,'0','0',0,1,'JS')";
 
-		String NoPKInsertSql = "insert into AL_SCHED_INFO values(" + counter + "," + "'" + JOB_NAME + NAME_EXTEND +"'," + "'"
-				+ getGUID(JOB_NAME) + "'," + "'" + addDate("2016-03-10 12:01:00 AM", 30000 * interval) + "'"
-				+ ",'-R\"Repo.txt\"  -G\"" + getGUID(JOB_NAME) + "\" -t5 -T14 -KspPRD',"
-				+ "'',-1,0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com'," + "3500,'0','0',0,1,'JS')";
-
+		String NoPKInsertSql = "";
+		
+		if(StartTime.equals(12)){
+			NoPKInsertSql = "insert into AL_SCHED_INFO values("+counter+","
+					+ "'"+JOB_NAME+"_12AM"+"',"
+					+ "'"+getGUID(JOB_NAME)+"'," 
+							+ "'"+addDate(NOPKStartTime_12AM, 30000*interval)+"'"
+									+ ",'-Slocalhost -NsecEnterprise -Q\"Repo\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspOraPRD_to_HANAERPPre',"
+											+ "'',-1," //AT_ID,如果inactive则为-1,active则为OBJECT_NO
+											+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
+											+ "3500,'0','0',0,0,'localhost')";
+		}else if(StartTime.equals(4)){
+			NoPKInsertSql = "insert into AL_SCHED_INFO values("+counter+","
+					+ "'"+JOB_NAME+"_4AM"+"',"
+					+ "'"+getGUID(JOB_NAME)+"'," 
+							+ "'"+addDate(NOPKStartTime_4AM, 30000*interval)+"'"
+									+ ",'-Slocalhost -NsecEnterprise -Q\"Repo\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspOraPRD_to_HANAERPPre',"
+											+ "'',-1," //AT_ID,如果inactive则为-1,active则为OBJECT_NO
+											+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
+											+ "3500,'0','0',0,0,'localhost')";
+		}else if(startTime.equals(8)){
+			NoPKInsertSql = "insert into AL_SCHED_INFO values("+counter+","
+					+ "'"+JOB_NAME+"_8PM"+"',"
+					+ "'"+getGUID(JOB_NAME)+"'," 
+							+ "'"+addDate(NOPKStartTime_8PM, 30000*interval)+"'"
+									+ ",'-Slocalhost -NsecEnterprise -Q\"Repo\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspOraPRD_to_HANAERPPre',"
+											+ "'',-1," //AT_ID,如果inactive则为-1,active则为OBJECT_NO
+											+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
+											+ "3500,'0','0',0,0,'localhost')";
+		}
 		
 		interval++;
 		try {
@@ -95,10 +127,10 @@ public class ScheduleUtil {
 		String DeltaInsertBOESql = "insert into AL_SCHED_INFO values("+counter+","
 				+ "'"+JOB_NAME+"',"
 						+ "'"+getGUID(JOB_NAME)+"'," 
-								+ "'"+addDate("2016-03-24 03:01:00 PM", 30000*interval)+"'"
+								+ "'"+addDate(startTime, 30000*interval)+"'"
 										+ ",'-Slocalhost -NsecEnterprise -Q\"Repo\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspOraPRD_to_HANAERPPre',"
-												+ "'',35901," //这里的35901是AT_ID， 选择BOE就是这样，选择系统schedule就是-1，这个值可能不能乱改
-												+ "1,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
+												+ "'',-1," //AT_ID,如果inactive则为-1,active则为OBJECT_NO
+												+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
 												+ "3500,'0','0',0,0,'localhost')";
 			
 			String DeltaInsertSql = "insert into AL_SCHED_INFO values("+counter+","
@@ -113,7 +145,7 @@ public class ScheduleUtil {
 			counter++;
 			interval++;
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(DeltaInsertSql);
+			PreparedStatement pstmt = conn.prepareStatement(DeltaInsertBOESql);
 //			pstmt.executeUpdate();
 		    pstmt.execute();
 		    if (!conn.getAutoCommit()) {   
