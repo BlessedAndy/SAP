@@ -131,14 +131,12 @@ public class ScheduleUtil {
 		interval++;
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(NoPKInsertSql);
-			// pstmt.executeUpdate();
 			pstmt.execute();
 			if (!conn.getAutoCommit()) {
 				conn.commit();
 			}
 			conn.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
