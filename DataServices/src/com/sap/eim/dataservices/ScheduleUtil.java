@@ -31,10 +31,6 @@ public class ScheduleUtil {
 		ArrayList<String> JobNames = getJobNames("JB_Y01%DELTA");  //SQL 语句里like后面的通配符regex
 //		insertBatch(JobNames);
 		
-		/*ArrayList<String> JobNames = getJobNames("JB_Y59%_DELTA");  //SQL 语句里like后面的通配符regex
-		insertBatch(JobNames);
-		System.out.println(JobNames.size() +" job schedules created!");*/
-		
 		String[] ins = { "JB_Y03T_LEDGER_BATCH_DELTA", "JB_Y03T_LEDGER_POINT_DELTA"};
 		for (int i = 0; i < ins.length; i++) {
 			insert(ins[i]);
@@ -47,9 +43,7 @@ public class ScheduleUtil {
 			counter++;
 			i++;
 		}
-		
 		System.out.println(i +" job schedules created!");
-		
 	}
 	
 	/**
