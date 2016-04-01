@@ -15,26 +15,30 @@ import com.sap.db.HanaUtil;
 public class ScheduleUtil {
 	
 	static int counter = 1000;
+
 	static String startTime = "2016-03-28 12:59:00 AM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
-	static String NOPKStartTime_12AM = "2016-03-28 12:10:00 AM";  
+	static String NOPKStartTime_12PM = "2016-03-28 12:10:00 PM";  
 	static String NOPKStartTime_4AM = "2016-03-28 04:10:00 AM";
 	static String NOPKStartTime_8PM = "2016-03-28 08:10:00 PM";
 	static ResultSet result;
 	static String SCHED_NAME = null;
 	static String JOB_GUID = null;
 	static ArrayList<String> JOB_NAMES;
-	static int interval = 1;
+	static int interval = 1;  //每个JOB的时间间隔，30秒
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		counter = queryMax()+1;
 		ArrayList<String> JobNames = getJobNames("JB_Y01%DELTA");  //SQL 语句里like后面的通配符regex
 //		insertBatch(JobNames);
 		
-		/*String[] ins = { "JB_Y02T_ACCIDENT_RSN_DELTA", "JB_Y02T_AGENT_DELTA"};
+		/*ArrayList<String> JobNames = getJobNames("JB_Y59%_DELTA");  //SQL 语句里like后面的通配符regex
+		insertBatch(JobNames);
+		System.out.println(JobNames.size() +" job schedules created!");*/
+		
+		String[] ins = { "JB_Y03T_LEDGER_BATCH_DELTA", "JB_Y03T_LEDGER_POINT_DELTA"};
 		for (int i = 0; i < ins.length; i++) {
 			insert(ins[i]);
-		}*/
+		}
 		
 		int i=0;
 		for(String JobName : JobNames){
@@ -45,7 +49,6 @@ public class ScheduleUtil {
 		}
 		
 		System.out.println(i +" job schedules created!");
-		
 		
 	}
 	
@@ -61,49 +64,76 @@ public class ScheduleUtil {
 
 		for(int i=0;i < JOB_NAMES.size();i++){
 			String JOB_NAME = JOB_NAMES.get(i);
+			System.out.println(JOB_NAME +" :");
 			insert(JOB_NAME);
 		}
 	}
 	
 	/**
+	 * 输入NOPK的匹配名就好，例如： "JB_Y01%_NOPK"
+	 * @param regex
+	 */
+	public static void insertNOPKBatch(String regex){
+		ArrayList<String> JOB_NAMES = getJobNames(regex);
+		for(int i=0;i < JOB_NAMES.size();i++){
+			String JOB_NAME = JOB_NAMES.get(i);
+			insertNOPK(JOB_NAME);
+		}
+		System.out.println(JOB_NAMES.size() +" job schedules created!");
+	}
+	
+	static void insertNOPK(String JOB_NAME){
+		insertNOPK_12PM(JOB_NAME);
+		insertNOPK_4AM(JOB_NAME);
+		insertNOPK_8PM(JOB_NAME);
+	}
+	
+	/**
 	 * 
 	 * @param JOB_NAME
-	 * @param StartTime   Start time of the schedules 12,4 or 8 (12AM, 4AM, 8PM)
+	 * @param StartTime   Start time of the schedules 12,4 or 8 (12PM, 4AM, 8PM)
 	 */
-	public static void insertNOPK(String JOB_NAME, String StartTime) {
+	private static void insertNOPK_12PM(String JOB_NAME) {
 		Connection conn = HanaUtil.getConnection();
 
 		String NoPKInsertSql = "";
-		
-		if(StartTime.equals(12)){
 			NoPKInsertSql = "insert into AL_SCHED_INFO values("+counter+","
-					+ "'"+JOB_NAME+"_12AM"+"',"
+					+ "'"+JOB_NAME+"_12AM"+"',"    //生成中午12点跑的Schedule名字
 					+ "'"+getGUID(JOB_NAME)+"'," 
-							+ "'"+addDate(NOPKStartTime_12AM, 30000*interval)+"'"
-									+ ",'-Slocalhost -NsecEnterprise -Q\"Repo\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspOraPRD_to_HANAERPPre',"
+							+ "'"+addDate(NOPKStartTime_12PM, 30000*interval)+"'"
+							+ ",'-Slocalhost -NsecEnterprise -Q\"Repo_2\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspPRD',"
 											+ "'',-1," //AT_ID,如果inactive则为-1,active则为OBJECT_NO
 											+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
 											+ "3500,'0','0',0,0,'localhost')";
-		}else if(StartTime.equals(4)){
+			counter++;
+			interval++;
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(NoPKInsertSql);
+			// pstmt.executeUpdate();
+			pstmt.execute();
+			if (!conn.getAutoCommit()) {
+				conn.commit();
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	private static void insertNOPK_4AM(String JOB_NAME) {
+		Connection conn = HanaUtil.getConnection();
+
+		String NoPKInsertSql = "";
 			NoPKInsertSql = "insert into AL_SCHED_INFO values("+counter+","
 					+ "'"+JOB_NAME+"_4AM"+"',"
 					+ "'"+getGUID(JOB_NAME)+"'," 
 							+ "'"+addDate(NOPKStartTime_4AM, 30000*interval)+"'"
-									+ ",'-Slocalhost -NsecEnterprise -Q\"Repo\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspOraPRD_to_HANAERPPre',"
+							+ ",'-Slocalhost -NsecEnterprise -Q\"Repo_2\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspPRD',"
 											+ "'',-1," //AT_ID,如果inactive则为-1,active则为OBJECT_NO
 											+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
 											+ "3500,'0','0',0,0,'localhost')";
-		}else if(startTime.equals(8)){
-			NoPKInsertSql = "insert into AL_SCHED_INFO values("+counter+","
-					+ "'"+JOB_NAME+"_8PM"+"',"
-					+ "'"+getGUID(JOB_NAME)+"'," 
-							+ "'"+addDate(NOPKStartTime_8PM, 30000*interval)+"'"
-									+ ",'-Slocalhost -NsecEnterprise -Q\"Repo\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspOraPRD_to_HANAERPPre',"
-											+ "'',-1," //AT_ID,如果inactive则为-1,active则为OBJECT_NO
-											+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
-											+ "3500,'0','0',0,0,'localhost')";
-		}
-		
+		counter++;
 		interval++;
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(NoPKInsertSql);
@@ -119,15 +149,54 @@ public class ScheduleUtil {
 		}
 	}
 	
+	private static void insertNOPK_8PM(String JOB_NAME) {
+		Connection conn = HanaUtil.getConnection();
+
+		String NoPKInsertSql = "";
+		
+			NoPKInsertSql = "insert into AL_SCHED_INFO values("+counter+","
+					+ "'"+JOB_NAME+"_8PM"+"',"
+					+ "'"+getGUID(JOB_NAME)+"'," 
+							+ "'"+addDate(NOPKStartTime_8PM, 30000*interval)+"'"
+							+ ",'-Slocalhost -NsecEnterprise -Q\"Repo_2\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspPRD',"
+											+ "'',-1," //AT_ID,如果inactive则为-1,active则为OBJECT_NO
+											+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
+											+ "3500,'0','0',0,0,'localhost')";
+		counter++;
+		interval++;
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(NoPKInsertSql);
+			// pstmt.executeUpdate();
+			pstmt.execute();
+			if (!conn.getAutoCommit()) {
+				conn.commit();
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	public static void insert(String JOB_NAME){
 		
 		Connection conn = HanaUtil.getConnection();
 		
-		String DeltaInsertBOESql = "insert into AL_SCHED_INFO values("+counter+","
+		String DeltaInsertBOESql_P = "insert into AL_SCHED_INFO values("+counter+","
 				+ "'"+JOB_NAME+"',"
 						+ "'"+getGUID(JOB_NAME)+"'," 
 								+ "'"+addDate(startTime, 30000*interval)+"'"
+										+ ",'-Slocalhost -NsecEnterprise -Q\"Repo_2\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspPRD',"
+												+ "'',-1," //AT_ID,如果inactive则为-1,active则为OBJECT_NO
+												+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
+												+ "3500,'0','0',0,0,'localhost')";
+		
+		/*String DeltaInsertBOESql_D = "insert into AL_SCHED_INFO values("+counter+","
+				+ "'"+JOB_NAME+"',"
+						+ "'"+getGUID(JOB_NAME)+"'," 
+								+ "'"+addDate(startTime, 30000*interval)+"'"
+=======
+>>>>>>> refs/remotes/origin/master
 										+ ",'-Slocalhost -NsecEnterprise -Q\"Repo\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspOraPRD_to_HANAERPPre',"
 												+ "'',-1," //AT_ID,如果inactive则为-1,active则为OBJECT_NO
 												+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
@@ -140,12 +209,13 @@ public class ScheduleUtil {
 									+ "'"+addDate(startTime, 30000*interval)+"'"
 											+ ",'-R\"Repo.txt\"  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspOraPRD_to_HANAERPPre',"
 													+ "'',-1,0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
-													+ "3500,'0','0',0,1,'JS')";
+													+ "3500,'0','0',0,1,'JS')";*/
 			
 			counter++;
 			interval++;
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(DeltaInsertBOESql);
+			PreparedStatement pstmt = conn.prepareStatement(DeltaInsertBOESql_P);
+
 //			pstmt.executeUpdate();
 		    pstmt.execute();
 		    if (!conn.getAutoCommit()) {   
@@ -211,7 +281,6 @@ public class ScheduleUtil {
 		Date date = null;
 		try {
 			date = format.parse(timestamp);
-			System.out.println("date : "+date.toString());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -229,9 +298,8 @@ public class ScheduleUtil {
 //		 String newDate_str = sDateFormat.format(newDate);
 		// cal.add(Calendar.HOUR, x);12小时�?
 		date = cal.getTime();
-		System.out.println("front:" + date);
 		cal = null;
-		System.out.println("format.format(date): "+format.format(date));
+		System.out.println("StartTime : "+format.format(date));
 		return format.format(date);
 	}
 
