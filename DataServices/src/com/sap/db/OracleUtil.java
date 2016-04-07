@@ -9,8 +9,9 @@ public class OracleUtil {
 
 	/**
 	 * 一个非常标准的连接Oracle数据库的示例代码
+	 * 
 	 */
-	public void testOracle()
+	public static void main(String[] args) 
 	{
 	    Connection con = null;// 创建一个数据库连接
 	    PreparedStatement pre = null;// 创建预编译语句对象，一般都是用这个而不用Statement
@@ -19,19 +20,20 @@ public class OracleUtil {
 	    {
 	        Class.forName("oracle.jdbc.driver.OracleDriver");// 加载Oracle驱动程序
 	        System.out.println("开始尝试连接数据库！");
-	        String url = "jdbc:oracle:" + "thin:@127.0.0.1:1521:XE";// 127.0.0.1是本机地址，XE是精简版Oracle的默认数据库名
-	        String user = "system";// 用户名,系统默认的账户名
-	        String password = "147";// 你安装时选设置的密码
+	        String url = "jdbc:oracle:thin:@10.5.129.61:1521:hcmdb";// 127.0.0.1是本机地址，XE是精简版Oracle的默认数据库名
+	        String user = "hcm";// 用户名,系统默认的账户名
+	        String password = "hcm";// 你安装时选设置的密码
 	        con = DriverManager.getConnection(url, user, password);// 获取连接
+	        System.out.println(con.toString());
 	        System.out.println("连接成功！");
-	        String sql = "select * from student where name=?";// 预编译语句，“？”代表参数
+	        /*String sql = "select * from student where name=?";// 预编译语句，“？”代表参数
 	        pre = con.prepareStatement(sql);// 实例化预编译语句
 	        pre.setString(1, "刘显安");// 设置参数，前面的1表示参数的索引，而不是表中列名的索引
 	        result = pre.executeQuery();// 执行查询，注意括号中不需要再加参数
 	        while (result.next())
 	            // 当结果集不为空时
 	            System.out.println("学号:" + result.getInt("id") + "姓名:"
-	                    + result.getString("name"));
+	                    + result.getString("name"));*/
 	    }
 	    catch (Exception e)
 	    {

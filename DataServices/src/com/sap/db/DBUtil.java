@@ -53,16 +53,16 @@ public class DBUtil {
 //			/DataServices/src/com/sap/db/dbinfo.properties
 			fis = new FileInputStream("dbinfo.properties");
 			prop.load(fis);
-//			OracleDriver = prop.getProperty("OracleDriver");
+			OracleDriver = prop.getProperty("OracleDriver");
 			HANADriver = prop.getProperty("HANADriver");
-//			OracleURL = prop.getProperty("OracleURL");
+			OracleURL = prop.getProperty("OracleURL");
 			HANAURL = prop.getProperty("HANAURL");
-//			OracleUserName = prop.getProperty("OracleUserName");
+			OracleUserName = prop.getProperty("OracleUserName");
 			HANAUserName = prop.getProperty("HANAUserName");
-//			OraclePasswd = prop.getProperty("OraclePasswd");
+			OraclePasswd = prop.getProperty("OraclePasswd");
 			HANAPasswd = prop.getProperty("HANAPasswd");
 			Class.forName(HANADriver);
-//			Class.forName(OracleDriver);
+			Class.forName(OracleDriver);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{

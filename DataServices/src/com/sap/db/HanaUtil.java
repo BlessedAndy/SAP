@@ -36,7 +36,7 @@ public class HanaUtil extends DBUtil{
 	 * @param args
 	 * @throws InterruptedException 
 	 */
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args){
 		
 		//JB_Y02_PM_WEB_FIN_SAVEAMT_DUE_DELTA 是坏的
 		
