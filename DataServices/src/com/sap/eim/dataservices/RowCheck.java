@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import com.sap.db.DBUtil;
 
@@ -23,8 +24,18 @@ public class RowCheck {
 	
 	public static void main(String[] args) {
 		
+		ArrayList<String> JobNames = ScheduleUtil.getJobNames("JB_Y%_DELTA");
+//		String[] JobNames = {"JB_Y02T_ACCIDENT_RSN_DELTA",};
+		for(String JobName : JobNames){
+			String OracleTableName = JobName.substring(3, JobName.length()-6);
+			String HANATableName = OracleTableName.substring(0, 3)+"P"+OracleTableName.substring(3);
+			System.out.println(OracleTableName+" :");
+			System.out.println("HANA Rows : "+hanaRowCount(HANATableName)+"    Oracle Rows : "+oracleRowCount(OracleTableName));
+		}
+		System.out.println(JobNames.size()+" tables caculated.");
+		
 //		System.out.println("Y01PWEB_APP_BASE Row Count : "+hanaRowCount("Y01PWEB_APP_BASE"));
-		System.out.println("Y01PWEB_APP_BASE Row Count : "+oracleRowCount("Y01WEB_APP_BASE"));
+//		System.out.println("Y01PWEB_APP_BASE Row Count : "+oracleRowCount("Y01WEB_APP_BASE"));
 	}
 	
 	public static int hanaRowCount(String tableName){
