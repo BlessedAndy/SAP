@@ -18,12 +18,12 @@ public class RowCheck {
 	
 	static String countSQLPre = "SELECT COUNT(*) FROM ";
 	
-	String oracleCount = "select COUNT(*) from Y52T_GC_CLAIM WHERE LAST_UPDATE IS NULL OR LAST_UPDATE <= '28-MAR-16 12.59.59.999999 PM'";
+	String oracleCount = "select COUNT(*) from Y52T_GC_CLAIM where T_CRT_TM >= DATE'2016-03-01' and T_CRT_TM < DATE'2016-04-01'";
 	
 	
 	public static void main(String[] args) {
 		System.out.println("Y01PWEB_APP_BASE Row Count : "+hanaRowCount("Y01PWEB_APP_BASE"));
-		System.out.println("Y01PWEB_APP_BASE Row Count : "+oracleRowCount("Y01WEB_APP_BASE"));
+//		System.out.println("Y01PWEB_APP_BASE Row Count : "+oracleRowCount("Y01WEB_APP_BASE"));
 	}
 	
 	public static int hanaRowCount(String tableName){
