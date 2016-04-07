@@ -11,7 +11,11 @@ import java.util.Date;
 import java.util.Locale;
 
 import com.sap.db.HanaUtil;
-
+/**
+ * 
+ * @author Andy Zhang
+ *
+ */
 public class ScheduleUtil {
 	
 	static int counter = 1000;
