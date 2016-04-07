@@ -16,7 +16,7 @@ public class ScheduleUtil {
 	
 	static int counter = 1000;
 
-	static String startTime = "2016-03-28 12:59:00 AM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
+	static String startTime = "2016-04-07 12:30:00 AM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
 	static String NOPKStartTime_12PM = "2016-03-28 12:10:00 PM";  
 	static String NOPKStartTime_4AM = "2016-03-28 04:10:00 AM";
 	static String NOPKStartTime_8PM = "2016-03-28 08:10:00 PM";
@@ -28,10 +28,17 @@ public class ScheduleUtil {
 
 	public static void main(String[] args) {
 		if(queryMax()==0){
-			counter = 1000;
+			counter = 100000;
 		}else{
 			counter = queryMax()+1;
 		}
+		ArrayList<String> JobNames = getJobNames("JB_Y00%_MD");
+		for(String JobName : JobNames){
+			System.out.println(JobName);
+			insert(JobName);
+		}
+		System.out.println(JobNames.size());
+
 		/*String[] pres = {"01","02","03","04","07","11","13","14","15",
 				"17","19","24","35","45","48","52","56","57","58","59"};
 				
@@ -44,10 +51,10 @@ public class ScheduleUtil {
 		}
 		System.out.println("Total Job Schedules : "+ total +" added.");*/
 		
-		String[] ins = { "JB_Y11ES_DOC_MAIN_DELTA","JB_Y11LLCLAIMPOLICY_DELTA"};
+		/*String[] ins = { "JB_Y11ES_DOC_MAIN_DELTA","JB_Y11LLCLAIMPOLICY_DELTA"};
 		for (int i = 0; i < ins.length; i++) {
 			insert(ins[i]);
-		}
+		}*/
 		
 	/*	int i=0;
 		for(String JobName : JobNames){
