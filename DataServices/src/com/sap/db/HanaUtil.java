@@ -95,7 +95,7 @@ public class HanaUtil extends DBUtil{
 		Connection conn = null;
 		try {
 			Class.forName("com.sap.db.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:sap://10.5.128.2:32915?reconnect=true","DS_REPOSITORY","Init1234"); 
+			conn = DriverManager.getConnection("jdbc:sap://10.5.128.2:32915?reconnect=true","DS_REPOSITORY_2","Init1234"); 
 		} catch (ClassNotFoundException e) {			
 			e.printStackTrace();
 		}catch (SQLException e) {	

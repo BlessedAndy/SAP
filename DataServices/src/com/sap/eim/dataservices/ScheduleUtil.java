@@ -27,23 +27,36 @@ public class ScheduleUtil {
 	static int interval = 1;  //每个JOB的时间间隔，30秒
 
 	public static void main(String[] args) {
-		counter = queryMax()+1;
-		ArrayList<String> JobNames = getJobNames("JB_Y01%DELTA");  //SQL 语句里like后面的通配符regex
-//		insertBatch(JobNames);
+		if(queryMax()==0){
+			counter = 1000;
+		}else{
+			counter = queryMax()+1;
+		}
+		/*String[] pres = {"01","02","03","04","07","11","13","14","15",
+				"17","19","24","35","45","48","52","56","57","58","59"};
+				
+		int total =0;
+		for(String pre : pres){
+			ArrayList<String> JobNames = getJobNames("JB_Y"+pre+"%DELTA");  //SQL 语句里like后面的通配符regex
+			insertBatch(JobNames);
+			System.out.println("Y"+ pre +" : "+ JobNames.size()+" job schedules created!");
+			total += JobNames.size();
+		}
+		System.out.println("Total Job Schedules : "+ total +" added.");*/
 		
-		String[] ins = { "JB_Y03T_LEDGER_BATCH_DELTA", "JB_Y03T_LEDGER_POINT_DELTA"};
+		String[] ins = { "JB_Y11ES_DOC_MAIN_DELTA","JB_Y11LLCLAIMPOLICY_DELTA"};
 		for (int i = 0; i < ins.length; i++) {
 			insert(ins[i]);
 		}
 		
-		int i=0;
+	/*	int i=0;
 		for(String JobName : JobNames){
 			System.out.println(counter + ":" + JobName);
 			insert(JobName);
 			counter++;
 			i++;
 		}
-		System.out.println(i +" job schedules created!");
+		System.out.println(i +" job schedules created!");*/
 	}
 	
 	/**
@@ -207,15 +220,12 @@ public class ScheduleUtil {
 			interval++;
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(DeltaInsertBOESql_P);
-
-//			pstmt.executeUpdate();
 		    pstmt.execute();
 		    if (!conn.getAutoCommit()) {   
 		        conn.commit();
 		      }
 		    conn.close();			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -311,6 +321,7 @@ public class ScheduleUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		System.out.println("JOB_GUID : "+JOB_GUID);
 		return JOB_GUID;
 	}
 		
