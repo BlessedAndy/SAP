@@ -421,7 +421,7 @@ public class MainUI extends ApplicationWindow {
 	@Override
 	protected void configureShell(Shell newShell) {
 		super.configureShell(newShell);
-		newShell.setText("SAP Business Objects Upgrade Tool");
+		newShell.setText("SAP DataServices Schedule Tool");
 	}
 
 	/**
