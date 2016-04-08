@@ -10,13 +10,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
+import com.sap.db.DBUtil;
 import com.sap.db.HanaUtil;
 
 public class ScheduleUtil {
 	
 	static int counter = 1000;
 
-	static String startTime = "2016-04-07 12:30:00 AM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
+	static String startTime = "2016-04-08 12:50:00 AM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
 	static String NOPKStartTime_12PM = "2016-03-28 12:10:00 PM";  
 	static String NOPKStartTime_4AM = "2016-03-28 04:10:00 AM";
 	static String NOPKStartTime_8PM = "2016-03-28 08:10:00 PM";
@@ -32,10 +33,13 @@ public class ScheduleUtil {
 		}else{
 			counter = queryMax()+1;
 		}
+		
+		System.out.println(counter);
+		
 		ArrayList<String> JobNames = getJobNames("JB_Y00%_MD");
 		for(String JobName : JobNames){
 			System.out.println(JobName);
-			insert(JobName);
+//			insert(JobName);
 		}
 		System.out.println(JobNames.size());
 
@@ -51,7 +55,7 @@ public class ScheduleUtil {
 		}
 		System.out.println("Total Job Schedules : "+ total +" added.");*/
 		
-		/*String[] ins = { "JB_Y11ES_DOC_MAIN_DELTA","JB_Y11LLCLAIMPOLICY_DELTA"};
+		/*String[] ins = { "JB_Y48S_USER_DPRB_DELTA","JB_Y48FLOW_DEPT_DELTA"};
 		for (int i = 0; i < ins.length; i++) {
 			insert(ins[i]);
 		}*/
@@ -192,7 +196,7 @@ public class ScheduleUtil {
 	
 	public static void insert(String JOB_NAME){
 		
-		Connection conn = HanaUtil.getConnection();
+		Connection conn = DBUtil.getHANAConnection();
 		
 		String DeltaInsertBOESql_P = "insert into AL_SCHED_INFO values("+counter+","
 				+ "'"+JOB_NAME+"',"
@@ -203,25 +207,15 @@ public class ScheduleUtil {
 												+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
 												+ "3500,'0','0',0,0,'localhost')";
 		
-		/*String DeltaInsertBOESql_D = "insert into AL_SCHED_INFO values("+counter+","
+		String DeltaInsertBOESql_D = "insert into AL_SCHED_INFO values("+counter+","
 				+ "'"+JOB_NAME+"',"
 						+ "'"+getGUID(JOB_NAME)+"'," 
 								+ "'"+addDate(startTime, 30000*interval)+"'"
-=======
->>>>>>> refs/remotes/origin/master
-										+ ",'-Slocalhost -NsecEnterprise -Q\"Repo\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspOraPRD_to_HANAERPPre',"
+										+ ",'-Slocalhost -NsecEnterprise -Q\"Repo\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspOraDEV_to_HANAERPDEV',"
 												+ "'',-1," //AT_ID,如果inactive则为-1,active则为OBJECT_NO
 												+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
 												+ "3500,'0','0',0,0,'localhost')";
-			
-			String DeltaInsertSql = "insert into AL_SCHED_INFO values("+counter+","
-					+ "'"+JOB_NAME+"',"
-							+ "'"+getGUID(JOB_NAME)+"'," 
-//									+ "'"+addDate("2016-03-24 06:01:00 AM", 30000*interval)+"'"
-									+ "'"+addDate(startTime, 30000*interval)+"'"
-											+ ",'-R\"Repo.txt\"  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspOraPRD_to_HANAERPPre',"
-													+ "'',-1,0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
-													+ "3500,'0','0',0,1,'JS')";*/
+
 			
 			counter++;
 			interval++;
@@ -266,7 +260,7 @@ public class ScheduleUtil {
 		PreparedStatement pstmt;
 		try {
 			// regex = JB_Y%_DELTA
-			pstmt = HanaUtil.getConnection()
+			pstmt = DBUtil.getHANAConnection()
 					.prepareStatement("SELECT NAME FROM AL_LANG where OBJECT_TYPE=0 and NAME LIKE '"+regex+"'");
 			result = pstmt.executeQuery();
 			for (int i = 0; result.next(); i++) {
