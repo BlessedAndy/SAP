@@ -38,14 +38,16 @@ public class ScheduleUtil {
 
 	public static void main(String[] args) {
 		
-		/*if(queryMax()==0){
+		if(queryMax()==0){
 		counter = 100000;
 	}else{
 		counter = queryMax()+1;
 	}
 	
 	System.out.println(counter);
+	exportStatistics();
 	
+	/*
 	ArrayList<String> JobNames = getJobNames("JB_Y00%_MD");
 	for(String JobName : JobNames){
 		System.out.println(JobName);
@@ -65,10 +67,7 @@ public class ScheduleUtil {
 	}
 	System.out.println("Total Job Schedules : "+ total +" added.");*/
 	
-	/*String[] ins = { "JB_Y48S_USER_DPRB_DELTA","JB_Y48FLOW_DEPT_DELTA"};
-	for (int i = 0; i < ins.length; i++) {
-		insert(ins[i]);
-	}*/
+	
 	
 /*	int i=0;
 	for(String JobName : JobNames){
@@ -78,39 +77,6 @@ public class ScheduleUtil {
 		i++;
 	}
 	System.out.println(i +" job schedules created!");*/
-		
-		ExportExcelUtil<List> ex = new ExportExcelUtil<List>();
-		// ID CUID Name Size Folder Owner Created at Modified at Description isInstance Universe
-		String[] Headers = { "PREFIX", "JOB NO", "JOB NAME"};
-		List dataSet = new ArrayList<String[]>();
-		String[] pres = {"01","02","03","04","07","11","13","14","15",
-				"17","19","24","35","45","48","52","56","57","58","59"};
-				
-		int total =0;
-		for(String pre : pres){
-			ArrayList<String> JobNames = getJobNames("JB_Y"+pre+"%DELTA");  //SQL 语句里like后面的通配符regex
-			for(String JobName : JobNames){
-				String[] row = {pre,String.valueOf(JobNames.size()),JobName};
-			}
-			System.out.println("Y"+ pre +" : "+ JobNames.size()+" job schedules created!");
-			total += JobNames.size();
-			
-		}
-		
-//		List dataset = RetriveUtil.webiRowDetail(enterpriseSession);
-		
-		OutputStream out;
-		try {
-			out = new FileOutputStream("C://Users//I310003//Desktop//Test//SAP DataServices Export.xls");
-			ex.exportExcel(Headers, dataSet, out);
-			out.close();
-			System.out.println("excel导出成功！");
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		
 		
 	}
 	
@@ -128,6 +94,37 @@ public class ScheduleUtil {
 			String JOB_NAME = JOB_NAMES.get(i);
 			System.out.println(JOB_NAME +" :");
 			insert(JOB_NAME);
+		}
+	}
+	
+	static void exportStatistics(){
+		ExportExcelUtil<List> ex = new ExportExcelUtil<List>();
+		// ID CUID Name Size Folder Owner Created at Modified at Description isInstance Universe
+		String[] Headers = { "PREFIX", "JOB NO", "JOB NAME"};
+		List dataSet = new ArrayList<String[]>();
+		String[] pres = {"01","02","03","04","07","11","13","14","15",
+				"17","19","24","35","45","48","52","56","57","58","59"};
+				
+		for(String pre : pres){
+			ArrayList<String> JobNames = getJobNames("JB_Y"+pre+"%_DELTA");  //SQL 语句里like后面的通配符regex
+			for(String JobName : JobNames){
+				String[] row = {pre,String.valueOf(JobNames.size()),JobName};
+				dataSet.add(row);
+			}
+			System.out.println("Y"+ pre +" : "+ JobNames.size()+" job schedules created!");
+		}
+		
+//		List dataset = RetriveUtil.webiRowDetail(enterpriseSession);
+		
+		OutputStream out;
+		try {
+			out = new FileOutputStream("C://Users//i310003//Desktop//export//SAP_ DataServices Export_MD.xls");
+			ex.exportExcel(Headers, dataSet, out);
+			out.close();
+			System.out.println("excel导出成功！");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
