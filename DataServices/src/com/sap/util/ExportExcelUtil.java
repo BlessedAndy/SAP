@@ -15,15 +15,15 @@ import org.apache.poi.hssf.util.HSSFColor;
 public class ExportExcelUtil<T> {
 
     public void exportExcel(Collection<T> dataset, OutputStream out) {
-        exportExcel("SAP BusinessObjects Data Export", null, dataset, out, "yyyy-MM-dd");
+        exportExcel("SAP DataServices Data Export", null, dataset, out, "yyyy-MM-dd");
     }
 
     public void exportExcel(String[] headers, Collection<T> dataset,OutputStream out) {
-        exportExcel("SAP BusinessObjects Data Export", headers, dataset, out, "yyyy-MM-dd");
+        exportExcel("SAP DataServices Data Export", headers, dataset, out, "yyyy-MM-dd");
     }
 
     public void exportExcel(String[] headers, Collection<T> dataset,OutputStream out, String pattern) {
-        exportExcel("SAP BusinessObjects Data Export", headers, dataset, out, pattern);
+        exportExcel("SAP DataServices Data Export", headers, dataset, out, pattern);
     }
 
     /**

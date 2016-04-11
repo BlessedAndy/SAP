@@ -1,5 +1,8 @@
 package com.sap.eim.dataservices;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,10 +11,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import com.sap.db.DBUtil;
 import com.sap.db.HanaUtil;
+import com.sap.util.ExportExcelUtil;
 /**
  * 
  * @author Andy Zhang
@@ -32,46 +37,81 @@ public class ScheduleUtil {
 	static int interval = 1;  //每个JOB的时间间隔，30秒
 
 	public static void main(String[] args) {
-		if(queryMax()==0){
-			counter = 100000;
-		}else{
-			counter = queryMax()+1;
-		}
 		
-		System.out.println(counter);
+		/*if(queryMax()==0){
+		counter = 100000;
+	}else{
+		counter = queryMax()+1;
+	}
+	
+	System.out.println(counter);
+	
+	ArrayList<String> JobNames = getJobNames("JB_Y00%_MD");
+	for(String JobName : JobNames){
+		System.out.println(JobName);
+//		insert(JobName);
+	}
+	System.out.println(JobNames.size());
+*/
+	/*String[] pres = {"01","02","03","04","07","11","13","14","15",
+			"17","19","24","35","45","48","52","56","57","58","59"};
+			
+	int total =0;
+	for(String pre : pres){
+		ArrayList<String> JobNames = getJobNames("JB_Y"+pre+"%DELTA");  //SQL 语句里like后面的通配符regex
+		insertBatch(JobNames);
+		System.out.println("Y"+ pre +" : "+ JobNames.size()+" job schedules created!");
+		total += JobNames.size();
+	}
+	System.out.println("Total Job Schedules : "+ total +" added.");*/
+	
+	/*String[] ins = { "JB_Y48S_USER_DPRB_DELTA","JB_Y48FLOW_DEPT_DELTA"};
+	for (int i = 0; i < ins.length; i++) {
+		insert(ins[i]);
+	}*/
+	
+/*	int i=0;
+	for(String JobName : JobNames){
+		System.out.println(counter + ":" + JobName);
+		insert(JobName);
+		counter++;
+		i++;
+	}
+	System.out.println(i +" job schedules created!");*/
 		
-		ArrayList<String> JobNames = getJobNames("JB_Y00%_MD");
-		for(String JobName : JobNames){
-			System.out.println(JobName);
-//			insert(JobName);
-		}
-		System.out.println(JobNames.size());
-
-		/*String[] pres = {"01","02","03","04","07","11","13","14","15",
+		ExportExcelUtil<List> ex = new ExportExcelUtil<List>();
+		// ID CUID Name Size Folder Owner Created at Modified at Description isInstance Universe
+		String[] Headers = { "PREFIX", "JOB NO", "JOB NAME"};
+		List dataSet = new ArrayList<String[]>();
+		String[] pres = {"01","02","03","04","07","11","13","14","15",
 				"17","19","24","35","45","48","52","56","57","58","59"};
 				
 		int total =0;
 		for(String pre : pres){
 			ArrayList<String> JobNames = getJobNames("JB_Y"+pre+"%DELTA");  //SQL 语句里like后面的通配符regex
-			insertBatch(JobNames);
+			for(String JobName : JobNames){
+				String[] row = {pre,String.valueOf(JobNames.size()),JobName};
+			}
 			System.out.println("Y"+ pre +" : "+ JobNames.size()+" job schedules created!");
 			total += JobNames.size();
+			
 		}
-		System.out.println("Total Job Schedules : "+ total +" added.");*/
 		
-		/*String[] ins = { "JB_Y48S_USER_DPRB_DELTA","JB_Y48FLOW_DEPT_DELTA"};
-		for (int i = 0; i < ins.length; i++) {
-			insert(ins[i]);
-		}*/
+//		List dataset = RetriveUtil.webiRowDetail(enterpriseSession);
 		
-	/*	int i=0;
-		for(String JobName : JobNames){
-			System.out.println(counter + ":" + JobName);
-			insert(JobName);
-			counter++;
-			i++;
+		OutputStream out;
+		try {
+			out = new FileOutputStream("C://Users//I310003//Desktop//Test//SAP DataServices Export.xls");
+			ex.exportExcel(Headers, dataSet, out);
+			out.close();
+			System.out.println("excel导出成功！");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		System.out.println(i +" job schedules created!");*/
+		
+		
+		
 	}
 	
 	/**

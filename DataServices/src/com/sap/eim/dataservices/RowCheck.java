@@ -1,12 +1,17 @@
 package com.sap.eim.dataservices;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.sap.db.DBUtil;
+import com.sap.util.ExportExcelUtil;
 
 /**
  * 
@@ -26,13 +31,38 @@ public class RowCheck {
 		
 		ArrayList<String> JobNames = ScheduleUtil.getJobNames("JB_Y%_DELTA");
 //		String[] JobNames = {"JB_Y02T_ACCIDENT_RSN_DELTA",};
+		List dataset = new ArrayList<String[]>();
 		for(String JobName : JobNames){
 			String OracleTableName = JobName.substring(3, JobName.length()-6);
 			String HANATableName = OracleTableName.substring(0, 3)+"P"+OracleTableName.substring(3);
 			System.out.println(OracleTableName+" :");
 			System.out.println("HANA Rows : "+hanaRowCount(HANATableName)+"    Oracle Rows : "+oracleRowCount(OracleTableName));
+			String[] row = {OracleTableName, String.valueOf(hanaRowCount(HANATableName)), String.valueOf(oracleRowCount(OracleTableName))};
+			dataset.add(row);
 		}
 		System.out.println(JobNames.size()+" tables caculated.");
+		
+		//--------------------------------------------
+				//export to excel
+		//--------------------------------------------
+		ExportExcelUtil<List> ex = new ExportExcelUtil<List>();
+		// ID CUID Name Size Folder Owner Created at Modified at Description isInstance Universe
+		String[] Headers = { "Table Name", "HANA Rows", "Oracle Rows"};
+		
+		 
+//		List dataset = RetriveUtil.webiRowDetail(enterpriseSession);
+		
+		OutputStream out;
+		try {
+			out = new FileOutputStream("C://Users//I310003//Desktop//Test//SAP DataServices Export.xls");
+			ex.exportExcel(Headers, dataset, out);
+			out.close();
+			System.out.println("excel导出成功！");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 //		System.out.println("Y01PWEB_APP_BASE Row Count : "+hanaRowCount("Y01PWEB_APP_BASE"));
 //		System.out.println("Y01PWEB_APP_BASE Row Count : "+oracleRowCount("Y01WEB_APP_BASE"));
