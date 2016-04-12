@@ -38,14 +38,14 @@ public class ScheduleUtil {
 
 	public static void main(String[] args) {
 		
-		if(queryMax()==0){
-		counter = 100000;
-	}else{
-		counter = queryMax()+1;
-	}
-	
-	System.out.println(counter);
-	exportStatistics();
+		if (queryMax() == 0) {
+			counter = 100000;
+		} else {
+			counter = queryMax() + 1;
+		}
+
+		System.out.println(counter);
+		exportStatistics();
 	
 	/*
 	ArrayList<String> JobNames = getJobNames("JB_Y00%_MD");
@@ -103,7 +103,7 @@ public class ScheduleUtil {
 		String[] Headers = { "PREFIX", "JOB NO", "JOB NAME"};
 		List dataSet = new ArrayList<String[]>();
 		String[] pres = {"01","02","03","04","07","11","13","14","15",
-				"17","19","24","35","45","48","52","56","57","58","59"};
+				"17","19","24","32","34","35","45","46","48","50","52","56","57","58","59"};
 				
 		for(String pre : pres){
 			ArrayList<String> JobNames = getJobNames("JB_Y"+pre+"%_DELTA");  //SQL 语句里like后面的通配符regex
@@ -118,7 +118,7 @@ public class ScheduleUtil {
 		
 		OutputStream out;
 		try {
-			out = new FileOutputStream("C://Users//i310003//Desktop//export//SAP_ DataServices Export_MD.xls");
+			out = new FileOutputStream("C://Users//i310003//Desktop//export//DELTA.xls");
 			ex.exportExcel(Headers, dataSet, out);
 			out.close();
 			System.out.println("excel导出成功！");

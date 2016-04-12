@@ -54,13 +54,14 @@ public class ExportExcelUtil<T> {
         style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
         style.setBorderRight(HSSFCellStyle.BORDER_THIN);
         style.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        style.setAlignment(HSSFCellStyle.ALIGN_LEFT);
         style.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
         // 生成一个字体
         HSSFFont font = workbook.createFont();
         font.setColor(HSSFColor.AUTOMATIC.index);
         font.setFontHeightInPoints((short) 12);
         font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        font.setFontName(HSSFFont.FONT_ARIAL);
         // 把字体应用到当前的样式
         style.setFont(font);
         // 生成并设置另一个样式
