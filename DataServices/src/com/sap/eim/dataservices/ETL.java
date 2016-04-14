@@ -38,8 +38,9 @@ public class ETL {
 				if (result.getString(1) != null) {
 					Row newRow = new Row();
 					newRow.tableName = result.getString(1);
-					newRow.batchNo = result.getInt(2);
+					newRow.batchNo = (int) Long.parseLong(result.getString(2));
 					newRow.last_update = result.getString(3);
+					System.out.println(newRow.tableName + "  :  "  + newRow.batchNo + "  :  " + newRow.last_update);
 					insertResult.add(newRow);
 				} else {
 					System.out.println("NULL!");
@@ -50,9 +51,9 @@ public class ETL {
 			e.printStackTrace();
 		}
 		
-		for(Row row : insertResult){
+		/*for(Row row : insertResult){
 			System.out.println("Row : tableName : " + row.tableName + " batch no : " + row.batchNo + " last update : " + row.last_update);
-		}
+		}*/
 		
 	}
 	
