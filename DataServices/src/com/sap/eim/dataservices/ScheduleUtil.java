@@ -53,7 +53,7 @@ public class ScheduleUtil {
 		ArrayList<String> JobNames = getJobNames("JB_Y00%_MD");
 		for (String JobName : JobNames) {
 			System.out.println(JobName);
-			insert(JobName);
+//			insert(JobName);
 		}
 		System.out.println(JobNames.size());
 
