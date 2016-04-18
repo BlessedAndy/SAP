@@ -77,7 +77,7 @@ public class MainUI extends ApplicationWindow {
 		Composite container = new Composite(parent, SWT.NONE);
 		container.setTouchEnabled(true);
 		/*
-		 * ����Window����Icon�������������ɾ��
+		 * 设置Window窗口Icon，如出现问题请删除
 		 */
 		
 		container.setLayout(null);
@@ -88,10 +88,11 @@ public class MainUI extends ApplicationWindow {
 		tabFolder.setBounds(0, 0, 826, 585);
 		tabFolder.setSelectionBackground(Display.getCurrent().getSystemColor(SWT.COLOR_TITLE_INACTIVE_BACKGROUND_GRADIENT));
 
-//**************************************************************************************
-//                                 ��һ��Ҷǩ��ʼ
-//**************************************************************************************
-		
+
+		//**************************************************************************************
+//		                                 第一个叶签开始
+		//**************************************************************************************
+					
 		CTabItem tbtmNewItem = new CTabItem(tabFolder, SWT.NONE);
 		tbtmNewItem.setText("ObjectList");
 		//tbtmNewItem.setControl(tabFolder);
@@ -179,14 +180,14 @@ public class MainUI extends ApplicationWindow {
 		lblSearch.setText("Search In");
 		
 		/**
-		 * ��һ��Ҷǩ��All
+		 * 第一个叶签的All
 		 */
 		Button allRadioButton = new Button(group, SWT.RADIO);
 		allRadioButton.setText("All Folders");
 		allRadioButton.setBounds(86, 128, 82, 16);
 		
 		/**
-		 * ��һ��Ҷǩ��Public Folders
+		 * 第一个叶签的Public Folders
 		 */
 		Button publicRadioButton = new Button(group, SWT.RADIO);
 		publicRadioButton.setBounds(175, 128, 104, 16);
@@ -203,10 +204,10 @@ public class MainUI extends ApplicationWindow {
 		text_Folder = new Text(group, SWT.BORDER);
 		text_Folder.setBounds(620, 125, 180, 21);
 		
-//////////////////////////////////��������������///////////////////////////////////////////////
+//////////////////////////////////以上是搜索条件///////////////////////////////////////////////
 		
-//*******************************��һ��Ҷǩ��Table******************************************
-		table_1 = new Table(group, SWT.BORDER | SWT.FULL_SELECTION);
+//*******************************第一个叶签的Table******************************************
+	    table_1 = new Table(group, SWT.BORDER | SWT.FULL_SELECTION);
 		table_1.setBounds(10, 155, 790, 344);
 		table_1.setHeaderVisible(true);
 		table_1.setLinesVisible(true);
@@ -261,14 +262,14 @@ public class MainUI extends ApplicationWindow {
 		tblclmnNewColumn_5.setText("Universe");
 		
 		/*
-		 * ��ʾ�ļ��ܹ���С
+		 * 显示文件总共大小
 		 */
 		Label totalSizeLabel = new Label(group, SWT.NONE);
 		totalSizeLabel.setBounds(25, 520, 213, 15);
 		totalSizeLabel.setText("Total 0 ");
 		
 		/**
-		 * ���label����ʾ���ж��ٸ�item
+		 * 这个label是显示共有多少个item
 		 */
 		Label totalItemLabel = new Label(group, SWT.NONE);
 		totalItemLabel.setBounds(319, 520, 124, 15);
@@ -277,7 +278,7 @@ public class MainUI extends ApplicationWindow {
 		Button btnNewButton = new Button(group, SWT.NONE);
 		btnNewButton.addSelectionListener(new SelectionAdapter() {
 			/**
-			 * ������ť
+			 * 导出按钮
 			 */
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -292,7 +293,7 @@ public class MainUI extends ApplicationWindow {
 				List dataset;
 				
 				/*
-				 * ѡ�񵼳�·��
+				 * 选择导出路径
 				 */
 				DirectoryDialog dialog = new DirectoryDialog(getShell());
 				dialog.setText("	BusinessObjects Locatator");
@@ -322,7 +323,7 @@ public class MainUI extends ApplicationWindow {
 					e1.printStackTrace();
 				}*/
 				MessageDialog.openInformation(getShell(), "Export View","Export Completed");
-				System.out.println("�����ɹ���");
+				System.out.println("导出成功！");
 			}
 		});
 		btnNewButton.setBounds(686, 515, 114, 25);
@@ -334,7 +335,7 @@ public class MainUI extends ApplicationWindow {
 		Button btnNewButton_2 = new Button(group, SWT.NONE);
 		btnNewButton_2.addSelectionListener(new SelectionAdapter() {
 			/**
-			 * Search����֮��Ķ���
+			 * Search按下之后的动作
 			 */
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -358,17 +359,6 @@ public class MainUI extends ApplicationWindow {
 				String ownerCombo = combo_Owner.getText();
 				String folder = (personalRadioButton.getSelection()? "personal":(publicRadioButton.getSelection()? "public":(underSpecifiedRadio.getSelection()? text_Folder.getText():"")));
 				
-				
-				
-				
-				
-				/*
-				 * 
-				 * ��ʾ�ļ��ܹ���С
-				 */
-				/**
-				 * ���label����ʾ���ж��ٸ�item
-				 */
 			}
 		});
 		btnNewButton_2.setBounds(667, 60, 114, 49);
