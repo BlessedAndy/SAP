@@ -26,7 +26,7 @@ public class ScheduleUtil {
 	
 	static int counter = 1000;
 
-	static String startTime = "2016-04-12 12:10:00 AM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
+	static String startTime = "2016-04-12 04:10:00 AM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
 	static String NOPKStartTime_12PM = "2016-04-12 12:12:00 PM";  
 	static String NOPKStartTime_4AM = "2016-04-12 04:10:00 AM";
 	static String NOPKStartTime_8PM = "2016-04-12 08:10:00 PM";
@@ -34,28 +34,32 @@ public class ScheduleUtil {
 	static String SCHED_NAME = null;
 	static String JOB_GUID = null;
 	static ArrayList<String> JOB_NAMES;
-	static int interval = 1;  //每个JOB的时间间隔，30秒
+	static int interval = 1;  
+	static int intervalSec = 10000; //每个JOB的时间间隔，10秒
 
 	public static void main(String[] args) {
 		
-		if (queryMax() == 0) {
+		String suffix = startTime.substring(11, 13)+startTime.substring(20, 22);
+		System.out.println("Suffix" + suffix);
+		
+		/*if (queryMax() == 0) {
 			counter = 100000;
 		} else {
 			counter = queryMax() + 1;
 		}
 
-		System.out.println(counter);
+		System.out.println(counter);*/
 //		exportStatistics();
 	
 		//DELTA JOB : "JB_Y%_DELTA"
 		//NOPK JOB : "JB_Y%_NOPK"
 		//Master Data : "JB_Y00%_MD"
-		ArrayList<String> JobNames = getJobNames("JB_Y00%_MD");
+		/*ArrayList<String> JobNames = getJobNames("JB_Y00%_MD");
 		for (String JobName : JobNames) {
 			System.out.println(JobName);
 //			insert(JobName);
 		}
-		System.out.println(JobNames.size());
+		System.out.println(JobNames.size());*/
 
 	/*String[] pres = {"01","02","03","04","07","11","13","14","15",
 			"17","19","24","35","45","48","52","56","57","58","59"};
@@ -241,10 +245,13 @@ public class ScheduleUtil {
 		
 		Connection conn = DBUtil.getHANAConnection();
 		
+		String suffix = startTime.substring(11, 13)+startTime.substring(20, 22);
+		System.out.println("Suffix" + suffix);
+		
 		String DeltaInsertBOESql_P = "insert into AL_SCHED_INFO values("+counter+","
-				+ "'"+JOB_NAME+"',"
+				+ "'"+JOB_NAME+suffix+"',"
 						+ "'"+getGUID(JOB_NAME)+"'," 
-								+ "'"+addDate(startTime, 30000*interval)+"'"
+								+ "'"+addDate(startTime, intervalSec*interval)+"'"
 										+ ",'-Slocalhost -NsecEnterprise -Q\"Repo_2\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspPRD',"
 												+ "'',-1," //AT_ID,如果inactive则为-1,active则为OBJECT_NO
 												+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
@@ -253,7 +260,7 @@ public class ScheduleUtil {
 		String DeltaInsertBOESql_D = "insert into AL_SCHED_INFO values("+counter+","
 				+ "'"+JOB_NAME+"',"
 						+ "'"+getGUID(JOB_NAME)+"'," 
-								+ "'"+addDate(startTime, 30000*interval)+"'"
+								+ "'"+addDate(startTime, intervalSec*interval)+"'"
 										+ ",'-Slocalhost -NsecEnterprise -Q\"Repo\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspOraDEV_to_HANAERPDEV',"
 												+ "'',-1," //AT_ID,如果inactive则为-1,active则为OBJECT_NO
 												+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com',"
