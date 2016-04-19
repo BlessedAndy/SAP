@@ -49,7 +49,7 @@ public class ExportExcelUtil<T> {
         HSSFCellStyle style = workbook.createCellStyle();
         // 设置这些样式
         style.setFillForegroundColor(HSSFColor.GREY_25_PERCENT.index);
-        style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+//        style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
         style.setBorderBottom(HSSFCellStyle.BORDER_THIN);
         style.setBorderLeft(HSSFCellStyle.BORDER_THIN);
         style.setBorderRight(HSSFCellStyle.BORDER_THIN);
@@ -61,22 +61,23 @@ public class ExportExcelUtil<T> {
         font.setColor(HSSFColor.AUTOMATIC.index);
         font.setFontHeightInPoints((short) 12);
         font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-        font.setFontName(HSSFFont.FONT_ARIAL);
+        font.setFontName("Courier New");
         // 把字体应用到当前的样式
         style.setFont(font);
         // 生成并设置另一个样式
         HSSFCellStyle style2 = workbook.createCellStyle();
         style2.setFillForegroundColor(HSSFColor.WHITE.index);
-        style2.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
+//        style2.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
         style2.setBorderBottom(HSSFCellStyle.BORDER_THIN);
         style2.setBorderLeft(HSSFCellStyle.BORDER_THIN);
         style2.setBorderRight(HSSFCellStyle.BORDER_THIN);
         style2.setBorderTop(HSSFCellStyle.BORDER_THIN);
-        style2.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        style2.setAlignment(HSSFCellStyle.ALIGN_LEFT);
         style2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
         // 生成另一个字体
         HSSFFont font2 = workbook.createFont();
         font2.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
+        font2.setFontName("Courier New");
         // 把字体应用到当前的样式
         style2.setFont(font2);
 

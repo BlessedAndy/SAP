@@ -26,7 +26,7 @@ public class ScheduleUtil {
 	
 	static int counter = 1000;
 
-	static String startTime = "2016-04-12 04:10:00 AM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
+	static String startTime = "2016-04-19 12:12:00 PM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
 	static String NOPKStartTime_12PM = "2016-04-12 12:12:00 PM";  
 	static String NOPKStartTime_4AM = "2016-04-12 04:10:00 AM";
 	static String NOPKStartTime_8PM = "2016-04-12 08:10:00 PM";
@@ -37,18 +37,23 @@ public class ScheduleUtil {
 	static int interval = 1;  
 	static int intervalSec = 10000; //每个JOB的时间间隔，10秒
 
+	private static String suffix;
+
 	public static void main(String[] args) {
 		
-		String suffix = startTime.substring(11, 13)+startTime.substring(20, 22);
-		System.out.println("Suffix" + suffix);
+		suffix = startTime.substring(11, 13)+startTime.substring(20, 22);
+		System.out.println("Suffix : " + suffix);
 		
-		/*if (queryMax() == 0) {
+		if (queryMax() == 0) {
 			counter = 100000;
 		} else {
 			counter = queryMax() + 1;
 		}
 
-		System.out.println(counter);*/
+		System.out.println(counter);
+		
+		insert("JB_Y24VIEW_BIZ_LD_REP_NOPK");
+		//导出统计信息
 //		exportStatistics();
 	
 		//DELTA JOB : "JB_Y%_DELTA"
@@ -244,12 +249,8 @@ public class ScheduleUtil {
 	public static void insert(String JOB_NAME){
 		
 		Connection conn = DBUtil.getHANAConnection();
-		
-		String suffix = startTime.substring(11, 13)+startTime.substring(20, 22);
-		System.out.println("Suffix" + suffix);
-		
 		String DeltaInsertBOESql_P = "insert into AL_SCHED_INFO values("+counter+","
-				+ "'"+JOB_NAME+suffix+"',"
+				+ "'"+JOB_NAME+"_"+suffix+"',"
 						+ "'"+getGUID(JOB_NAME)+"'," 
 								+ "'"+addDate(startTime, intervalSec*interval)+"'"
 										+ ",'-Slocalhost -NsecEnterprise -Q\"Repo_2\" -UAdministrator -PSW5pdDEyMzQ  -G\""+getGUID(JOB_NAME)+"\" -t5 -T14 -KspPRD',"
