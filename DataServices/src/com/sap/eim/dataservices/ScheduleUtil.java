@@ -26,7 +26,7 @@ public class ScheduleUtil {
 	
 	static int counter = 1000;
 
-	static String startTime = "2016-04-19 12:12:00 PM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
+	static String startTime = "2016-04-28 04:12:00 PM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
 	static String NOPKStartTime_12PM = "2016-04-12 12:12:00 PM";  
 	static String NOPKStartTime_4AM = "2016-04-12 04:10:00 AM";
 	static String NOPKStartTime_8PM = "2016-04-12 08:10:00 PM";
@@ -41,9 +41,9 @@ public class ScheduleUtil {
 
 	public static void main(String[] args) {
 		
-		suffix = startTime.substring(11, 13)+startTime.substring(20, 22);
+		suffix = startTime.substring(11, 13) + startTime.substring(20, 22);
 		System.out.println("Suffix : " + suffix);
-		
+
 		if (queryMax() == 0) {
 			counter = 100000;
 		} else {
@@ -51,8 +51,18 @@ public class ScheduleUtil {
 		}
 
 		System.out.println(counter);
+
+		String[] JobNames = new String[] { "JB_Y14LWFIELDMAP_DELTA", "JB_Y11LWFIELDMAP_DELTA",
+				"JB_Y15LABBCOMMISION_DELTA", "JB_Y19LABBCOMMISION_DELTA", "JB_Y13LABBCOMMISION_DELTA" };
+
+		int i = 0;
+		for (String JobName : JobNames) {
+			System.out.println(counter + ":" + JobName);
+			insert(JobName);
+			i++;
+		}
+		System.out.println(i + " job schedules created!");
 		
-		insert("JB_Y24VIEW_BIZ_LD_REP_NOPK");
 		//导出统计信息
 //		exportStatistics();
 	
@@ -79,15 +89,6 @@ public class ScheduleUtil {
 	System.out.println("Total Job Schedules : "+ total +" added.");*/
 	
 	
-	
-/*	int i=0;
-	for(String JobName : JobNames){
-		System.out.println(counter + ":" + JobName);
-		insert(JobName);
-		counter++;
-		i++;
-	}
-	System.out.println(i +" job schedules created!");*/
 		
 	}
 	
