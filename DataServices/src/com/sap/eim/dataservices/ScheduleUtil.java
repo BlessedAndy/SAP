@@ -26,7 +26,9 @@ public class ScheduleUtil {
 	
 	static int counter = 1000;
 
-	static String startTime = "2016-04-28 04:12:00 PM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
+	static String startTime_4AM = "2016-05-05 04:12:00 AM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
+	static String startTime_8PM = "2016-05-05 08:12:00 PM";
+	static String startTime_12PM = "2016-05-05 12:12:00 PM";
 	static String NOPKStartTime_12PM = "2016-04-12 12:12:00 PM";  
 	static String NOPKStartTime_4AM = "2016-04-12 04:10:00 AM";
 	static String NOPKStartTime_8PM = "2016-04-12 08:10:00 PM";
@@ -37,12 +39,12 @@ public class ScheduleUtil {
 	static int interval = 1;  
 	static int intervalSec = 10000; //每个JOB的时间间隔，10秒
 
-	private static String suffix;
+	private String suffix;
 
 	public static void main(String[] args) {
 		
-		suffix = startTime.substring(11, 13) + startTime.substring(20, 22);
-		System.out.println("Suffix : " + suffix);
+		/*suffix = startTime_4AM.substring(11, 13) + startTime_4AM.substring(20, 22);
+		System.out.println("Suffix : " + suffix);*/
 
 		if (queryMax() == 0) {
 			counter = 100000;
@@ -58,10 +60,12 @@ public class ScheduleUtil {
 		int i = 0;
 		for (String JobName : JobNames) {
 			System.out.println(counter + ":" + JobName);
-			insert(JobName);
+			insert(JobName, startTime_4AM, JobName+"_4AM");
+			insert(JobName, startTime_8PM, JobName+"_8PM");
+			insert(JobName, startTime_12PM, JobName+"_12PM");
 			i++;
 		}
-		System.out.println(i + " job schedules created!");
+		System.out.println(i*3 + " job schedules created!");
 		
 		//导出统计信息
 //		exportStatistics();
@@ -105,7 +109,7 @@ public class ScheduleUtil {
 		for(int i=0;i < JOB_NAMES.size();i++){
 			String JOB_NAME = JOB_NAMES.get(i);
 			System.out.println(JOB_NAME +" :");
-			insert(JOB_NAME);
+//			insert(JOB_NAME);
 		}
 	}
 	
@@ -247,7 +251,42 @@ public class ScheduleUtil {
 		}
 	}
 	
-	public static void insert(String JOB_NAME){
+	/**
+	 * 
+	 * @param JOB_NAME
+	 * @param startTime
+	 * @param suffix
+	 */
+	public static void insert(String JOB_NAME, String startTime, String suffix) {
+
+		Connection conn = DBUtil.getHANAConnection();
+		String DeltaInsertBOESql_P = "insert into AL_SCHED_INFO values(" + counter + "," + "'" + JOB_NAME + "_" + suffix
+				+ "'," + "'" + getGUID(JOB_NAME) + "'," + "'" + addDate(startTime, intervalSec * interval) + "'"
+				+ ",'-Slocalhost -NsecEnterprise -Q\"Repo_2\" -UAdministrator -PSW5pdDEyMzQ  -G\"" + getGUID(JOB_NAME)
+				+ "\" -t5 -T14 -KspPRD'," + "'',-1," // AT_ID,如果inactive则为-1,active则为OBJECT_NO
+				+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com'," + "3500,'0','0',0,0,'localhost')";
+
+		String DeltaInsertBOESql_D = "insert into AL_SCHED_INFO values(" + counter + "," + "'" + JOB_NAME + "'," + "'"
+				+ getGUID(JOB_NAME) + "'," + "'" + addDate(startTime, intervalSec * interval) + "'"
+				+ ",'-Slocalhost -NsecEnterprise -Q\"Repo\" -UAdministrator -PSW5pdDEyMzQ  -G\"" + getGUID(JOB_NAME)
+				+ "\" -t5 -T14 -KspOraDEV_to_HANAERPDEV'," + "'',-1," // AT_ID,如果inactive则为-1,active则为OBJECT_NO
+				+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com'," + "3500,'0','0',0,0,'localhost')";
+
+		counter++;
+		interval++;
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(DeltaInsertBOESql_P);
+			pstmt.execute();
+			if (!conn.getAutoCommit()) {
+				conn.commit();
+			}
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+/*	public static void insert(String JOB_NAME){
 		
 		Connection conn = DBUtil.getHANAConnection();
 		String DeltaInsertBOESql_P = "insert into AL_SCHED_INFO values("+counter+","
@@ -281,7 +320,7 @@ public class ScheduleUtil {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
 /*	public static ArrayList<String> excludeJobNames(ArrayList<String> JOB_NAMES, String[] EX_NAMES){
 		for(String JOB_NAME : getJobNames()){
