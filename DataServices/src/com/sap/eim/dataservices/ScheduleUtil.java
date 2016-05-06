@@ -54,15 +54,17 @@ public class ScheduleUtil {
 
 		System.out.println(counter);
 
-		String[] JobNames = new String[] { "JB_Y14LWFIELDMAP_DELTA", "JB_Y11LWFIELDMAP_DELTA",
-				"JB_Y15LABBCOMMISION_DELTA", "JB_Y19LABBCOMMISION_DELTA", "JB_Y13LABBCOMMISION_DELTA" };
+		/*String[] JobNames = new String[] { "JB_Y57FW_COGNIZANCE_DELTA",
+				"JB_Y57FW_HOLD_ACOURT_DELTA"};*/
+
+		ArrayList<String> JobNames = getJobNames("JB_Y17" + "%DELTA"); // SQL
 
 		int i = 0;
 		for (String JobName : JobNames) {
 			System.out.println(counter + ":" + JobName);
-			insert(JobName, startTime_4AM, JobName+"_4AM");
-			insert(JobName, startTime_8PM, JobName+"_8PM");
-			insert(JobName, startTime_12PM, JobName+"_12PM");
+			insert(JobName, startTime_4AM, "4AM");
+			insert(JobName, startTime_8PM, "8PM");
+			insert(JobName, startTime_12PM,"12PM");
 			i++;
 		}
 		System.out.println(i*3 + " job schedules created!");
@@ -266,11 +268,11 @@ public class ScheduleUtil {
 				+ "\" -t5 -T14 -KspPRD'," + "'',-1," // AT_ID,如果inactive则为-1,active则为OBJECT_NO
 				+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com'," + "3500,'0','0',0,0,'localhost')";
 
-		String DeltaInsertBOESql_D = "insert into AL_SCHED_INFO values(" + counter + "," + "'" + JOB_NAME + "'," + "'"
+		/*String DeltaInsertBOESql_D = "insert into AL_SCHED_INFO values(" + counter + "," + "'" + JOB_NAME + "'," + "'"
 				+ getGUID(JOB_NAME) + "'," + "'" + addDate(startTime, intervalSec * interval) + "'"
 				+ ",'-Slocalhost -NsecEnterprise -Q\"Repo\" -UAdministrator -PSW5pdDEyMzQ  -G\"" + getGUID(JOB_NAME)
 				+ "\" -t5 -T14 -KspOraDEV_to_HANAERPDEV'," + "'',-1," // AT_ID,如果inactive则为-1,active则为OBJECT_NO
-				+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com'," + "3500,'0','0',0,0,'localhost')";
+				+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com'," + "3500,'0','0',0,0,'localhost')";*/
 
 		counter++;
 		interval++;
