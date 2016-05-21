@@ -26,11 +26,11 @@ public class ScheduleUtil {
 	
 	static int counter = 1000;
 
-	static String startTime_4AM = "2016-05-09 01:07:00 AM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
-	static String startTime_8PM = "2016-05-09 08:20:00 PM";
-	static String startTime_12PM = "2016-05-09 12:20:00 PM";
+	static String startTime_4AM = "2016-05-17 04:16:00 AM";  //2016-03-24 03:01:00 AM  //schedule开始的时间
+	static String startTime_8PM = "2016-05-17 08:16:00 PM";
+	static String startTime_12PM = "2016-05-17 12:16:00 PM";
 	
-	static String startTime_MD = "2016-05-12 01:07:00 AM";
+	static String startTime_MD = "2016-05-12 12:12:00 PM";
 	
 	static String NOPKStartTime_12PM = "2016-04-12 12:12:00 PM";  
 	static String NOPKStartTime_4AM = "2016-04-12 04:10:00 AM";
@@ -60,15 +60,15 @@ public class ScheduleUtil {
 		/*String[] JobNames = new String[] { "JB_Y57FW_COGNIZANCE_DELTA",
 				"JB_Y57FW_HOLD_ACOURT_DELTA"};*/
 
-		ArrayList<String> JobNames = getJobNames("JB_Y" + "%MD"); // SQL
+		ArrayList<String> JobNames = getJobNames("JB_Y" + "%_NOPK"); // SQL
 
 		int i = 0;
 		for (String JobName : JobNames) {
 			System.out.println(counter + ":" + JobName);
-//			insert(JobName, startTime_MD, "MD");
-//			insert(JobName, startTime_4AM, "4AM");
-//			insert(JobName, startTime_8PM, "8PM");
-//			insert(JobName, startTime_12PM,"12PM");
+//			insert(JobName, startTime_MD, "2PM");
+			insert(JobName, startTime_4AM, "4AM");
+			insert(JobName, startTime_8PM, "8PM");
+			insert(JobName, startTime_12PM,"12PM");
 			i++;
 		}
 		System.out.println(i*3 + " job schedules created!");
