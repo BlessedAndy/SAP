@@ -266,7 +266,14 @@ public class ScheduleUtil {
 	public static void insert(String JOB_NAME, String startTime, String suffix) {
 
 		Connection conn = DBUtil.getHANAConnection();
+		
 		String DeltaInsertBOESql_P = "insert into AL_SCHED_INFO values(" + counter + "," + "'" + JOB_NAME + "_" + suffix
+				+ "'," + "'" + getGUID(JOB_NAME) + "'," + "'" + addDate(startTime, intervalSec * interval) + "'"
+				+ ",'-Slocalhost -NsecEnterprise -Q\"Repo_2\" -UAdministrator -PSW5pdDEyMzQ  -G\"" + getGUID(JOB_NAME)
+				+ "\" -t5 -T14 -KspPRD'," + "'',-1," // AT_ID,如果inactive则为-1,active则为OBJECT_NO
+				+ "0,'WEEKLY','-2147483521','ahradq01.ab-insurance.com'," + "3500,'0','0',0,0,'localhost')";
+		
+		String DeltaInsertBOESql_PRD = "insert into AL_SCHED_INFO values(" + counter + "," + "'" + JOB_NAME + "_" + suffix
 				+ "'," + "'" + getGUID(JOB_NAME) + "'," + "'" + addDate(startTime, intervalSec * interval) + "'"
 				+ ",'-Slocalhost -NsecEnterprise -Q\"Repo_2\" -UAdministrator -PSW5pdDEyMzQ  -G\"" + getGUID(JOB_NAME)
 				+ "\" -t5 -T14 -KspPRD'," + "'',-1," // AT_ID,如果inactive则为-1,active则为OBJECT_NO
