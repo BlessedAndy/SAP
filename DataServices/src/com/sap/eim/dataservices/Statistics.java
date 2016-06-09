@@ -18,8 +18,7 @@ public class Statistics {
 		// ID CUID Name Size Folder Owner Created at Modified at Description isInstance Universe
 		String[] Headers = { "PREFIX", "JOB NO", "JOB NAME"};
 		List dataSet = new ArrayList<String[]>();
-		String[] pres = {"01","02","03","04","07","11","13","14","15",
-				"17","19","24","32","34","35","45","46","48","50","52","56","57","58","59"};
+		String[] pres = {"00","01","02","03","04","07","11","13","14","15","17","19","24","27","32","34","35","36","45","46","48","50","52","56","57","58","59"};
 				
 		for(String pre : pres){
 			ArrayList<String> JobNames = ScheduleUtil.getJobNames("JB_Y"+pre+"%_DELTA");  //SQL 语句里like后面的通配符regex
