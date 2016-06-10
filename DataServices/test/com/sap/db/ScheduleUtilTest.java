@@ -27,5 +27,10 @@ public class ScheduleUtilTest {
 			System.out.println(jobName);
 		}
 	}
+	
+	@Test
+	public void testInsert(){
+		
+	}
 
 }

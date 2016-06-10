@@ -60,6 +60,7 @@ public class ScheduleUtil {
 
 		System.out.println(counter);
 		
+		//for XinAo Project
 		ArrayList<String> JobNames = getJobNames("JB_Y" + "%_NOPK"); // SQL
 
 		int i = 0;
@@ -83,6 +84,31 @@ public class ScheduleUtil {
 			i++;
 		}
 		System.out.println(i + " job schedules created!");
+		
+		//for AB Project
+		/*ArrayList<String> JobNames = getJobNames("JB_Y" + "%_NOPK"); // SQL
+
+		int i = 0;
+		for (String JobName : JobNames) {
+			System.out.println(counter + ":" + JobName);
+			String HOST_NAME = "";
+
+			if (i % 2 == 0) {
+				HOST_NAME = "ahradp02";
+			} else {
+				HOST_NAME = "ahradp01";
+			}
+
+			System.out.println(HOST_NAME);
+//			insert(JobName, startTime_MD, "1AM", HOST_NAME);
+			
+			insert(JobName, startTime_4AM, "4AM", HOST_NAME); 
+			insert(JobName, startTime_8PM, "8PM", HOST_NAME);
+			insert(JobName, startTime_12PM,"12PM", HOST_NAME);
+			 
+			i++;
+		}
+		System.out.println(i + " job schedules created!");*/
 
 
 		/*String[] JobNames = new String[] { "JB_Y03FE_RELATION_DELTA",
