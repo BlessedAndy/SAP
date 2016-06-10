@@ -29,12 +29,19 @@ public class DBUtil {
 	//连接数据库的参数
 	private static String OracleDriver = "" ;
 	private static String HANADriver = "" ;
+	private static String DB2Driver = "";
+	
 	private static String OracleURL = "";
 	private static String HANAURL = "";
+	private static String DB2URL = "";
+	
 	private static String OracleUserName = "";
 	private static String HANAUserName = "";
+	private static String DB2UserName = "";
+	
 	private static String OraclePasswd = "";
 	private static String HANAPasswd = "";
+	private static String DB2Passwd= "";
 	
 	private static Properties prop = null;
 	private static FileInputStream fis = null;
@@ -55,14 +62,23 @@ public class DBUtil {
 			prop.load(fis);
 			OracleDriver = prop.getProperty("OracleDriver");
 			HANADriver = prop.getProperty("HANADriver");
+			DB2Driver = prop.getProperty("DB2Driver");
+			
 			OracleURL = prop.getProperty("OracleURL");
 			HANAURL = prop.getProperty("HANAURL");
+			DB2URL = prop.getProperty("DB2URL");
+			
 			OracleUserName = prop.getProperty("OracleUserName");
 			HANAUserName = prop.getProperty("HANAUserName");
+			DB2UserName = prop.getProperty("DB2UserName");
+			
 			OraclePasswd = prop.getProperty("OraclePasswd");
 			HANAPasswd = prop.getProperty("HANAPasswd");
+			DB2Passwd = prop.getProperty("DB2Passwd");
+			
 			Class.forName(HANADriver);
 			Class.forName(OracleDriver);
+			Class.forName(DB2Driver);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally{
@@ -73,6 +89,16 @@ public class DBUtil {
 			}
 			fis = null;
 		}
+	}
+	
+	//get DB2 Connection
+	public static Connection getDB2Connection(){
+		try {
+			conn = DriverManager.getConnection(DB2URL,DB2UserName,DB2Passwd);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return conn;
 	}
 	
 	//得到HANA连接

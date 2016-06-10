@@ -10,10 +10,12 @@ public class DBUtilTest {
 
 	@Test
 	public void testGetConnection() {
-		System.out.println(DBUtil.getHANAConnection().toString());
+		
+		System.out.println(DBUtil.getDB2Connection());
+		/*System.out.println(DBUtil.getHANAConnection().toString());
 		System.out.println(DBUtil.getOracleConnection().toString());
 		ResultSet result = DBUtil.getQueryResultSet();
-		System.out.println(result.toString());
+		System.out.println(result.toString());*/
 	}
 
 	@Test

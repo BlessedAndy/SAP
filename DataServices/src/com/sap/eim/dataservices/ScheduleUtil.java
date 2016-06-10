@@ -437,7 +437,7 @@ public class ScheduleUtil {
 		PreparedStatement pstmt;
 		try {
 			// regex = JB_Y%_DELTA
-			pstmt = DBUtil.getHANAConnection()
+			pstmt = DBUtil.getDB2Connection()
 					.prepareStatement("SELECT NAME FROM AL_LANG where OBJECT_TYPE=0 and NAME LIKE '"+regex+"'");
 			result = pstmt.executeQuery();
 			for (int i = 0; result.next(); i++) {
