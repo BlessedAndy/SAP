@@ -30,7 +30,9 @@ public class ScheduleUtil {
 	static String startTime_8PM = "2016-05-26 08:07:12 PM";
 	static String startTime_12PM = "2016-05-26 12:07:12 PM";
 	
-	static String startTime_MD = "2016-05-12 12:50:00 AM";
+	static String startTime_MD = "2016-06-10 12:12:12 AM";
+	
+	static String startTime_XinAo = "2016-06-12 00:12:12";
 	
 	static String NOPKStartTime_12PM = "2016-04-12 12:07:00 PM";  
 	static String NOPKStartTime_4AM = "2016-04-12 04:10:00 AM";
@@ -40,7 +42,7 @@ public class ScheduleUtil {
 	static String JOB_GUID = null;
 	static ArrayList<String> JOB_NAMES;
 	static int interval = 1;  
-	static int intervalSec = 5000; //每个JOB的时间间隔，5秒
+	static int intervalSec = 10000; //每个JOB的时间间隔，5秒
 
 	private String suffix;
 
@@ -61,26 +63,16 @@ public class ScheduleUtil {
 		System.out.println(counter);
 		
 		//for XinAo Project
-		ArrayList<String> JobNames = getJobNames("JB_Y" + "%_NOPK"); // SQL
+		ArrayList<String> JobNames = getJobNames("hive_%"); // SQL
 
 		int i = 0;
 		for (String JobName : JobNames) {
 			System.out.println(counter + ":" + JobName);
-			String HOST_NAME = "";
-
-			if (i % 2 == 0) {
-				HOST_NAME = "ahradp02";
-			} else {
-				HOST_NAME = "ahradp01";
-			}
+			String HOST_NAME = "elcndc2ysjds01t";
 
 			System.out.println(HOST_NAME);
-//			insert(JobName, startTime_MD, "1AM", HOST_NAME);
 			
-			insert(JobName, startTime_4AM, "4AM", HOST_NAME); 
-			insert(JobName, startTime_8PM, "8PM", HOST_NAME);
-			insert(JobName, startTime_12PM,"12PM", HOST_NAME);
-			 
+			insert(JobName, startTime_XinAo, "12AM", HOST_NAME);
 			i++;
 		}
 		System.out.println(i + " job schedules created!");
@@ -358,9 +350,15 @@ public class ScheduleUtil {
 	 */
 	public static void insert(String JOB_NAME, String startTime, String suffix,String HOST_NAME) {
 		
-		Connection conn = DBUtil.getHANAConnection();
+		Connection conn = DBUtil.getDB2Connection();
 		
-		String DeltaInsertBOESql_P = "insert into AL_SCHED_INFO values(" + counter + "," + "'" + JOB_NAME + "_" + suffix
+		String DeltaInsertBOESql_DEV_XinAO = "insert into AL_SCHED_INFO values("+counter+"," + "'" + JOB_NAME + "_" + suffix
+				+ "'," + "'" + getGUID(JOB_NAME) + "'," + "'" + addDate_DB2(startTime, intervalSec * interval) + "'"
+				+ ",'-S10.5.129.23 -NsecEnterprise -Q\"REPO_PRD\" -UAdministrator -PSW5pdDEyMzQ  -G\"" + getGUID(JOB_NAME)
+				+ "\" -t5 -T14 -ClusterLevelJOB -ServerGroupHCM_REPO_PRD'," + "'',-1," 
+				+ "0,'WEEKLY',-2147483521,'"+HOST_NAME+"'," + "3500,0,0,0,0,'10.5.129.23')";
+		
+/*		String DeltaInsertBOESql_P = "insert into AL_SCHED_INFO values(" + counter + "," + "'" + JOB_NAME + "_" + suffix
 				+ "'," + "'" + getGUID(JOB_NAME) + "'," + "'" + addDate(startTime, intervalSec * interval) + "'"
 				+ ",'-Slocalhost -NsecEnterprise -Q\"Repo_2\" -UAdministrator -PSW5pdDEyMzQ  -G\"" + getGUID(JOB_NAME)
 				+ "\" -t5 -T14 -KspPRD'," + "'',-1," // AT_ID,如果inactive则为-1,active则为OBJECT_NO
@@ -376,7 +374,7 @@ public class ScheduleUtil {
 				+ "'," + "'" + getGUID(JOB_NAME) + "'," + "'" + addDate(startTime, intervalSec * interval) + "'"
 				+ ",'-S10.5.129.23 -NsecEnterprise -Q\"REPO_PRD_BAK\" -UAdministrator -PSW5pdDEyMzQ  -G\"" + getGUID(JOB_NAME)
 				+ "\" -t5 -T14 -ClusterLevelJOB -ServerGroupHCM_REPO_PRD_BAK'," + "'',-1," // AT_ID,如果inactive则为-1,active则为OBJECT_NO
-				+ "0,'WEEKLY','-2147483521','"+HOST_NAME+"'," + "3500,'0','0',0,0,'10.5.129.23')";
+				+ "0,'WEEKLY','-2147483521','"+HOST_NAME+"'," + "3500,'0','0',0,0,'10.5.129.23')";*/
 		
 		/*String DeltaInsertBOESql_D = "insert into AL_SCHED_INFO values(" + counter + "," + "'" + JOB_NAME + "'," + "'"
 				+ getGUID(JOB_NAME) + "'," + "'" + addDate(startTime, intervalSec * interval) + "'"
@@ -387,7 +385,7 @@ public class ScheduleUtil {
 		counter++;
 		interval++;
 		try {
-			PreparedStatement pstmt = conn.prepareStatement(DeltaInsertBOESql_PRD);
+			PreparedStatement pstmt = conn.prepareStatement(DeltaInsertBOESql_DEV_XinAO);
 			pstmt.execute();
 			if (!conn.getAutoCommit()) {
 				conn.commit();
@@ -480,6 +478,35 @@ public class ScheduleUtil {
 		return JOB_NAMES;
 	}
 	
+	public static String addDate_DB2(String timestamp, int x) {
+		//MMM dd, yyyy hh:mm:ss.S a                    2016-03-10 12:01:00 AM
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",Locale.ENGLISH);// 24小时�?
+		// SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");//12小时�?
+		Date date = null;
+		try {
+			date = format.parse(timestamp);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		if (date == null)
+			return "";
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		cal.add(Calendar.MILLISECOND, x);
+//		cal.add(Calendar.HOUR_OF_DAY, x);// 24小时�?
+		 //关键�?  
+//		 Date newDate = DateUtils.addMilliseconds(cal,100))�?  
+		 //就是对cd加上100毫秒,�?100秒就是加�?-100毫秒      
+		  
+		 //将生成的时间输出为字符串  
+//		 String newDate_str = sDateFormat.format(newDate);
+		// cal.add(Calendar.HOUR, x);12小时�?
+		date = cal.getTime();
+		cal = null;
+		System.out.println("StartTime : "+format.format(date));
+		return format.format(date);
+	}
+	
 	public static String addDate(String timestamp, int x) {
 		//MMM dd, yyyy hh:mm:ss.S a                    2016-03-10 12:01:00 AM
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a",Locale.ENGLISH);// 24小时�?
@@ -512,7 +539,7 @@ public class ScheduleUtil {
 	public static String getGUID(String JOB_NAME){
 		PreparedStatement pstmt;
 		try {
-			pstmt = HanaUtil.getConnection().prepareStatement("SELECT GUID FROM AL_LANG WHERE NAME = '"+JOB_NAME+"'");
+			pstmt = DBUtil.getDB2Connection().prepareStatement("SELECT GUID FROM AL_LANG WHERE NAME = '"+JOB_NAME+"'");
 			result = pstmt.executeQuery();
 			result.next();
 		} catch (SQLException e) {
@@ -551,7 +578,7 @@ public class ScheduleUtil {
 	public static int queryMax(){
 		PreparedStatement pstmt;
 		try {
-			pstmt = DBUtil.getHANAConnection().prepareStatement("SELECT MAX(OBJECT_KEY) FROM AL_SCHED_INFO");
+			pstmt = DBUtil.getDB2Connection().prepareStatement("SELECT MAX(OBJECT_KEY) FROM AL_SCHED_INFO");
 			result = pstmt.executeQuery();
 			result.next();
 			counter = result.getInt(1);
